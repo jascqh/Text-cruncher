@@ -1,6 +1,6 @@
 <template>
-<div class="col-lg-6">
-    <div class="col-sm-6">
+<div class="col-lg-6" align="center">
+    <div class="col-sm-6" align="center">
         <b-carousel
             v-model="slide"
             :interval="4000"
@@ -11,6 +11,7 @@
                     class="d-block w-200"
                     src="../assets/TextCruncherLogo.jpg"
                     alt="image slot"
+                    height="200"
                 >
                 </template>
             </b-carousel-slide>
