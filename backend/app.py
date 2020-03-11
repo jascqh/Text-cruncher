@@ -4,13 +4,16 @@ import requests
 import os
 import re
 import time
+import xlsxwriter
 from bs4 import BeautifulSoup
 from gensim.summarization import summarize
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from datetime import datetime
-from flask import Flask, render_template, request, send_file
 from flask_mail import Mail, Message
+from flask import Flask, render_template, request, send_file, jsonify
+from flask_cors import CORS
+
 
 """ --------------------Main Script-------------------------- """
 #Readability
@@ -36,7 +39,6 @@ chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--no-sandbox')
 # sel_driver = webdriver.Chrome(executable_path=chromedriver_path,chrome_options=chrome_options)
 sel_driver = webdriver.Chrome(executable_path='./static/ChromeDriverWin32/chromedriver.exe',chrome_options=chrome_options) #Local host Test
-
 
 def scrape(lst_query, fileName):
 
@@ -114,6 +116,10 @@ def scrape(lst_query, fileName):
     writer.save()
     writer.close()
     sel_driver.quit() #closes all instances of sel_driver
+
+    excel_data_df = pandas.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
+    json_str = excel_data_df.to_json()
+    return json_str
 
 def pullContent(soup):
     print("Pulling")
@@ -202,13 +208,17 @@ def get_content(url):
     return final_text_summary
 
 
-#test
-# scrape (["dota"], "dota")
-
 """-------------------------------FLASK APPLICATION------------------------------------""" 
 ##localhost5000
+# configuration
+DEBUG = True
 
+# instantiate the app
 app = Flask(__name__)
+app.config.from_object(__name__)
+
+# enable CORS
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 email_pw = os.environ.get('EMAIL_PW') #fetch from environment credentials
 
@@ -230,6 +240,8 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 """Flask Mail Sending"""
 mail= Mail(app)
 
+# Routing
+
 @app.route('/send-mail/', methods=['POST'])
 def send_mail():
     receiver = []
@@ -249,25 +261,30 @@ def send_mail():
 # def home():
 #     # return render_template('index.html')
 
-@app.route('/', methods=['POST'])
+@app.route('/scrape', methods=['GET', 'POST'])
 def scrape_now():
     #OBtains data from html form and pass it through python to another html page
-    queries = request.form['queries'] #receives from html form as String
-    lst_queries = queries.split(',') #split by ','
-    current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-    scrape(lst_queries, current_timestamp)
+    # queries = request.form['queries'] #receives from html form as String
     # return render_template('downloads.html', filename=current_timestamp)
+
+    result = {'status': 'success'}
+    if request.method == 'POST':
+        post_data = request.get_json()
+        queries = post_data.get('queries')    
+        lst_queries = queries.split(',') #split by ','
+        current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
+        result = scrape(lst_queries, current_timestamp)
+
+    else:
+        result['books'] = 'fail again'
+    return jsonify(result)
+
 
 @app.route('/return-file/<filename>')
 def return_file(filename):
     return send_file('./static/user_pulls/Output_'+filename+'.xlsx', attachment_filename='Output.xlsx', cache_timeout=0)
 
-# @app.route('/about')
-# def about():
-#     # return render_template('about.html')
 
-#runs the application in debug mode
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-    # app.run(debug=True)
+
+if __name__ == '__main__':
+    app.run()

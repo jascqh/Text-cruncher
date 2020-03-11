@@ -13,7 +13,7 @@
       <button type="button" id="btnFetch" class="btn btn-primary mb-2" @click="validator()">Scrape!
         <i v-if = "loadingButton" class = "spinner-border spinner-border-sm"></i>
       </button>
-
+{{msg}}
     
   </b-container>
 </div>
@@ -29,14 +29,25 @@ export default {
   data() {
     return {
       payload: '',
-      loadingButton: false
+      loadingButton: false,
+      msg:[]
     }
   },
 
   methods: {
+
     scrape: function() {
-      const path = 'http://localhost:5000/';
-      axios.post(path, this.payload)
+      const path = 'http://localhost:5000/scrape';
+      const help = {queries: this.payload}
+      axios.post(path, help)
+      .then((res) => {
+          this.msg = res.data;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          this.msg = 'fail'
+          console.error(error);
+        });
     },
 
     load: function() {
@@ -77,9 +88,8 @@ export default {
               });
       }
     }
-
-    
   },
+
 
   components:{
     "slideShow": SlideShow
