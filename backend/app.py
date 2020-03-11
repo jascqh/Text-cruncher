@@ -245,9 +245,9 @@ def send_mail():
         mail.send(msg)
     # return render_template('downloads.html', filename=filename)
 
-@app.route('/')
-def home():
-    # return render_template('index.html')
+# @app.route('/')
+# def home():
+#     # return render_template('index.html')
 
 @app.route('/', methods=['POST'])
 def scrape_now():
@@ -262,9 +262,9 @@ def scrape_now():
 def return_file(filename):
     return send_file('./static/user_pulls/Output_'+filename+'.xlsx', attachment_filename='Output.xlsx', cache_timeout=0)
 
-@app.route('/about')
-def about():
-    # return render_template('about.html')
+# @app.route('/about')
+# def about():
+#     # return render_template('about.html')
 
 #runs the application in debug mode
 if __name__ == "__main__":

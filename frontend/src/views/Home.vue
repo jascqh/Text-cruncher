@@ -1,27 +1,84 @@
 <template>
-<div>
+<div class='container'>
   <b-container align="center">
       <slideShow align="center"></slideShow>
       <p>Please input at least one query up to 5 at once.</p>
     <b-row align-v = "center">
-      <b-form-textarea v-model="text"
+      <b-form-textarea v-model="payload"
       :placeholder="'Enter your queries here \nEg. Quary 1, Quary 2, Quary 3 ... Up to 5 Quaries'"
       :rows="2"
       :max-rows="5"></b-form-textarea>
     </b-row>
       <div class="mt-2" align="center">Please separate your queries with a comma ',' in between</div>
-      <div class="mt-2">Value: {{ text }}</div>
+      <button type="button" id="btnFetch" class="btn btn-primary mb-2" @click="validator()">Scrape!
+        <i v-if = "loadingButton" class = "spinner-border spinner-border-sm"></i>
+      </button>
+
+    
   </b-container>
 </div>
+  
 </template>
 
 <script>
 import SlideShow from "../components/slideShow.vue"
+import swal from 'sweetalert';
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      text: ''
+      payload: '',
+      loadingButton: false
     }
+  },
+
+  methods: {
+    scrape: function() {
+      const path = 'http://localhost:5000/';
+      axios.post(path, this.payload)
+    },
+
+    load: function() {
+      this.loadingButton = !this.loadingButton;
+      this.scrape(); //Submits form
+    },
+
+    validator: function() {
+      var queries = this.payload;
+      var commas_query = queries.match(/,/g);
+      var commas = 0
+      if ( commas_query != null ) {
+          commas = commas_query.length
+      }
+      if (queries == "") {
+          swal({
+            title: "Input is Empty!",
+            text: "Please check the missing field!!",
+            icon: "warning",
+            button: "Alright"
+          });
+      }
+      else if (commas > 4) {
+            swal({
+                title: "Input has too many queries",
+                text: "Sorry but we are unable to process too many queries at once",
+                icon: "info",
+                button: "Aww Okay..."
+              });
+      }
+      else {
+          this.load();
+          swal({
+                title: "Processing Queries",
+                text: "As this process involves multiple processes, it will take a few minutes. Therefore, we seek your patience and understanding",
+                icon: "success",
+                button: "I understand"
+              });
+      }
+    }
+
+    
   },
 
   components:{
