@@ -24,6 +24,7 @@
 import SlideShow from "../components/slideShow.vue"
 import swal from 'sweetalert';
 import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -31,15 +32,18 @@ export default {
       loadingButton: false
     }
   },
+
   methods: {
     scrape: function() {
       const path = 'http://localhost:5000/';
       axios.post(path, this.payload)
     },
+
     load: function() {
       this.loadingButton = !this.loadingButton;
       this.scrape(); //Submits form
     },
+
     validator: function() {
       var queries = this.payload;
       var commas_query = queries.match(/,/g);
@@ -73,8 +77,10 @@ export default {
               });
       }
     }
+
     
   },
+
   components:{
     "slideShow": SlideShow
   }
