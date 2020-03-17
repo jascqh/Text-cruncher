@@ -5,7 +5,7 @@
       <p>Please input at least one query up to 5 at once.</p>
     <b-row align-v = "center">
       <b-form-textarea v-model="text"
-      :placeholder="'Enter your queries here \nEg. Quary 1, Quary 2, Quary 3 ... Up to 5 Quaries'"
+      :placeholder="'Enter your queries here \nEg. Query 1, Query 2, Query 3 ... Up to 5 Queries'"
       :rows="2"
       :max-rows="5"></b-form-textarea>
     </b-row>
