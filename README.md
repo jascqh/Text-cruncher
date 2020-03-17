@@ -1,7 +1,25 @@
-# bt3103
+# Text-cruncher 
 BT3103 project
 
+## Requirements
+- Save and Fetch data from Firestore database
+- Must be developed in Vue.js
+- Must be deployed in firebase / firestore
+- Must have a github repository with the history of the work done.
+- Include a dashboard to display project analytics.
 
+## Application summary
+Our application is a TextSummarizer and Web scraping  for research webpage called TextCrucher. It accesses the content from Google search results and helps the user scrape all the data to produce a compiled excel sheet of the relevant summarized information that will be sent to the user’s email or via instant download through our website.
+
+## Installation
+clone the project from github 
+```
+cd "file location" from command prompt / terminal 
+npm install 
+npm run serve
+```
+
+## Tech stack 
 virtual environment inside the "backend" directory is created based on Python36
 use: .\venv\Scripts\activate to activate enviroment, will be on localhost5000
 
@@ -10,3 +28,7 @@ Left to do:
 2. rendering download page
 3. retriving file from firebase 
 4. Using Firebase to email (alternative use flask_mail which is already implemented)
+- VueJS
+- Firestore / firebase
+- Bootstrap
+- Flask

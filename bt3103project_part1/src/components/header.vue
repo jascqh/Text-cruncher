@@ -12,6 +12,8 @@
             <b-navbar-nav class="ml-auto">
                 <b-nav-item to="/" >Home</b-nav-item>
                 <b-nav-item to="/about">About</b-nav-item>
+                <b-nav-item to="/login">Login</b-nav-item>
+                <b-nav-item to="/history">History</b-nav-item>
             </b-navbar-nav>
             </b-collapse>
         </b-navbar>
