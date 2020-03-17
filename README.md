@@ -13,11 +13,11 @@ Our application is a TextSummarizer and Web scraping  for research webpage calle
 
 ## Installation
 clone the project from github 
-'''
+```
 cd "file location" from command prompt / terminal 
 npm install 
 npm run serve
-'''
+```
 
 ## Tech stack 
 virtual environment inside the "backend" directory is created based on Python36
