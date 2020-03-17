@@ -8,7 +8,7 @@ BT3103 project
 - Must have a github repository with the history of the work done.
 - Include a dashboard to display project analytics.
 
-## What is it 
+## Application summary
 Our application is a TextSummarizer and Web scraping  for research webpage called TextCrucher. It accesses the content from Google search results and helps the user scrape all the data to produce a compiled excel sheet of the relevant summarized information that will be sent to the user’s email or via instant download through our website.
 
 ## Installation
