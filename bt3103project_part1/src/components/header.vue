@@ -5,7 +5,7 @@
                 <img src="../assets/TextCruncherLogo.jpg" height ="30" width ="30">
             </b-navbar-brand>
             <b-navbar-brand a>TextCruncher</b-navbar-brand>
-
+            
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
             <b-collapse id="nav-collapse" is-nav >
@@ -13,6 +13,7 @@
                 <b-nav-item to="/" >Home</b-nav-item>
                 <b-nav-item to="/about">About</b-nav-item>
                 <b-nav-item to="/login">Login</b-nav-item>
+                <b-nav-item to="/register">Register</b-nav-item>
                 <b-nav-item to="/history">History</b-nav-item>
             </b-navbar-nav>
             </b-collapse>
@@ -20,6 +21,35 @@
     </div>
 
 </template>
+
+<script>
+import firebase from 'firebase';
+export default {
+  name: 'navbar',
+  data() {
+    return {
+      isLoggedIn: false,
+      currentUser: false
+    };
+  },
+  created() {
+    if (firebase.auth().currentUser) {
+      this.isLoggedIn = true;
+      this.currentUser = firebase.auth().currentUser.email;
+    }
+  },
+  methods: {
+    logout: function() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.go({ path: this.$router.path });
+        });
+    }
+  }
+};
+</script>
 
 <style lang="scss" scoped>
 #nav a.router-link-exact-active {

@@ -1,8 +1,8 @@
 <template>
-<div>
+<div> 
   <b-container align="center">
       <slideShow align="center"></slideShow>
-      <p>Please input at least one query up to 5 at once.</p>
+     <p>Please input at least one query up to 5 at once.</p>
     <b-row align-v = "center">
       <b-form-textarea v-model="text"
       :placeholder="'Enter your queries here \nEg. Query 1, Query 2, Query 3 ... Up to 5 Queries'"
