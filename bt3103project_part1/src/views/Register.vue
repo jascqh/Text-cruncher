@@ -44,6 +44,7 @@ export default {
         .then(
           user => {
             // console.log(user);
+            user.email = this.email
             alert(`Account Created for ${user.email}`);
             this.$router.go({ path: this.$router.path });
           },
