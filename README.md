@@ -22,6 +22,7 @@ To run the code for backend,
 ```
 pip install virtualenv
 ```
+Replace ```C:\Path\To\Python\python.exe``` with the location of your python.exe
 ```
 cd my-project
 virtualenv --python C:\Path\To\Python\python.exe venv
@@ -33,6 +34,9 @@ Activate the environment
 add libraries
 ```
 pip install -r requirements.txt
+```
+```
+python app.py
 ```
 
 ## Tech stack 
