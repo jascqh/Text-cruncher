@@ -35,6 +35,7 @@ add libraries
 ```
 pip install -r requirements.txt
 ```
+Run app.py 
 ```
 python app.py
 ```
