@@ -117,12 +117,12 @@ def scrape(lst_query, fileName):
     writer.close()
     sel_driver.quit() #closes all instances of sel_driver
 
-    excel_data_df = pandas.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
-    json_str = excel_data_df.to_json()
-    return json_str
+    # excel_data_df = pandas.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
+    # json_str = excel_data_df.to_json()
+    # return json_str
 
 def pullContent(soup):
-    print("Pulling")
+    # print("Pulling")
     results = ""
     links = soup.select("p")
     if (len(links) == 0):
@@ -148,10 +148,10 @@ def pullContent(soup):
 
 # Main content Generator with BS4 and Selenium if BS4 fails to scrape
 def get_content(url):
-    prCyan('BS4 Pull Request...')
+    # prCyan('BS4 Pull Request...')
     headers = requests.utils.default_headers()
     headers.update({
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Safari/605.1.15',
     })
     page = ''
     while page == '':
@@ -168,8 +168,8 @@ def get_content(url):
     raw_html = page.content
     soup = BeautifulSoup(raw_html, 'html.parser')
     results = pullContent(soup)
-    prGreen('BS4 Original Content:')
-    print(results)
+    # prGreen('BS4 Original Content:')
+    # print(results)
     headers = soup.select("h1")
     header = ""
     if len(headers) != 0:
@@ -182,7 +182,7 @@ def get_content(url):
 
     # Check if content can be pulled with BS4
     """word count minimum"""
-    validThreshold = 300
+    validThreshold = 400
     if len(results.split(" ")) < validThreshold:
         # Selenium Pull
         sel_driver.implicitly_wait(1)  # reduce error
@@ -190,23 +190,29 @@ def get_content(url):
         soup = BeautifulSoup(sel_driver.page_source, "html.parser")
         results = pullContent(soup)
         prCyan('Selenium Original Content:')
-        print(results)
+        # print(results)
 
     """Output with summariser"""
     # apply final regex clean up before summarising
     results = re.sub(r"\{(.*?)\}+", '', results) #removes anything enclosing {}
     results = re.sub(r"(#[A-Za-z]+)",'', results) #removes hashtags
     results = re.sub(r"(^.+@[^\.].*\.[a-z]{2,}$)",'', results)  #removes email
-    prCyan('After Regex...')
-    print(results)
+    # prCyan('After Regex...')
+    # print(results)
     final_results = summarize(results)
-    prCyan('With text summary:')
-    print(final_results)
+    # prCyan('With text summary:')
+    # print(final_results)
     final_text_summary.append(header)
     final_text_summary.append(final_results)
 
     return final_text_summary
 
+def restart_program():
+    """Restarts the current program.
+    Note: this function does not return. Any cleanup action (like
+    saving data) must be done before calling this function."""
+    python = sys.executable
+    os.execl(python, python, * sys.argv)
 
 """-------------------------------FLASK APPLICATION------------------------------------""" 
 ##localhost5000
@@ -277,7 +283,7 @@ def scrape_now():
 
     else:
         result['books'] = 'fail again'
-    return jsonify(result)
+    restart_program()
 
 
 @app.route('/return-file/<filename>')
