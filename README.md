@@ -18,17 +18,38 @@ cd "file location" from command prompt / terminal
 npm install 
 npm run serve
 ```
+To run the code for backend,
+```
+pip install virtualenv
+```
+Replace ```C:\Path\To\Python\python.exe``` with the location of your python.exe
+```
+cd my-project
+virtualenv --python C:\Path\To\Python\python.exe venv
+```
+Activate the environment 
+```
+.\venv\Scripts\activate
+```
+add libraries
+```
+pip install -r requirements.txt
+```
+Run app.py 
+```
+python app.py
+```
 
 ## Tech stack 
 virtual environment inside the "backend" directory is created based on Python36
 use: .\venv\Scripts\activate to activate enviroment, will be on localhost5000
+- VueJS
+- Firestore / firebase
+- Bootstrap
+- Flask
 
 Left to do:
 1. Scrape Results to firebase
 2. rendering download page
 3. retriving file from firebase 
 4. Using Firebase to email (alternative use flask_mail which is already implemented)
-- VueJS
-- Firestore / firebase
-- Bootstrap
-- Flask
