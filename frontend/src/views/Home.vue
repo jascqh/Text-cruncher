@@ -47,7 +47,9 @@ export default {
           // eslint-disable-next-line
           this.msg = 'fail'
           console.error(error);
-        });
+        }).then(() =>{
+          this.$router.push('download');
+        })
     },
 
     load: function() {
