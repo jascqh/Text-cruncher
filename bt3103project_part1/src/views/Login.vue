@@ -17,6 +17,7 @@
               <label class="white-text" for="password">Password</label>
             </div>
             <button v-on:click="login" class="btn btn-large btn-extended grey lighten-4 black-text">Login</button>
+            <p> You don't have an account? You can create one by clicking <router-link to= "/register">here.</router-link> </p>
           </form>
         </div>
       </div>
@@ -41,10 +42,10 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(
-          user => {
-            user.email = this.email
+          data => {
+            var user = data.user;
             alert(`You are logged in as ${user.email}`);
-            this.$router.push('/');
+            this.$router.replace({ name: "Home" });; 
           },
           err => {
             alert(err.message);

@@ -42,11 +42,10 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(
-          user => {
-            // console.log(user);
-            user.email = this.email
+         data => {
+            var user = data.user;
             alert(`Account Created for ${user.email}`);
-            this.$router.go({ path: this.$router.path });
+            this.$router.push('/');
           },
           err => {
             alert(err.message);
