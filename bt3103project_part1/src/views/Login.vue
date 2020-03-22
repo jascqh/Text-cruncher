@@ -27,6 +27,7 @@
 
 <script>
 import firebase from 'firebase';
+
 export default {
   name: 'login',
   data: function() {
@@ -49,8 +50,10 @@ export default {
             alert(err.message);
           }
         );
+      
       e.preventDefault();
     }
+    
   }
 };
 </script>
