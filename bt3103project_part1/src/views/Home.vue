@@ -36,7 +36,8 @@ export default {
       item : {
         Email: "",
         Date: "",
-        Json: ""
+        Json: "",
+        Name: ""
       } 
     }
   },

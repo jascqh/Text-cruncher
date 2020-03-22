@@ -43,6 +43,10 @@ export default {
       this.itemsList.splice(index,1)
       //Msg to be displayed. Can be made as an alert
       console.log("Item Deleted Successfully")
+    },
+
+    jsonToExcel:function(){
+
     }
     
   },
@@ -61,9 +65,6 @@ header{
     border-style: solid;
     border-color:black;
     border-width: 2px;
-}
-h1{
-    color:ivory
 }
 h2{
   text-align: center
