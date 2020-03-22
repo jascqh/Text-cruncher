@@ -8,7 +8,7 @@ export default{
                 {
                     label: 'Various Ways',
                     data: [4, 28, 12, 9],
-                    backgroundColor:['aqua','lightgreen','red','orange'],
+                    backgroundColor:['aqua','lightgreen','red', 'orange'],
                     borderWidth:0.5,
                     borderColor:"#000",
                     fill:true
