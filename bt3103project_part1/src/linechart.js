@@ -3,7 +3,7 @@ export default{
     extends:Line,
     data: () => ({
         chartdata: {
-          labels: ['January', 'February','March','April'],
+          labels: ['January', 'February','March', 'April'],
           datasets: [
             {
               label: 'Searches',
