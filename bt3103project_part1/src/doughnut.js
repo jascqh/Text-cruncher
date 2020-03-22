@@ -3,7 +3,7 @@ export default{
     extends:Doughnut,
     data: () => ({
         chartdata: {
-          labels: ['Like', 'Dislike'],
+          labels: ['Like','Dislike'],
           datasets: [
             {
               label: 'Sales',
