@@ -5,6 +5,7 @@ import os
 import re
 import time
 import xlsxwriter
+import myCred
 from bs4 import BeautifulSoup
 from gensim.summarization import summarize
 from selenium import webdriver
@@ -115,7 +116,7 @@ def scrape(lst_query, fileName):
     df_results = None
     writer.save()
     writer.close()
-    sel_driver.quit() #closes all instances of sel_driver
+    # sel_driver.quit() #closes all instances of sel_driver
 
     return fileName
     # excel_data_df = pandas.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
@@ -218,6 +219,10 @@ def restart_program():
 """-------------------------------FLASK APPLICATION------------------------------------""" 
 ##localhost5000
 # configuration
+
+myCred.setVar()
+email_pw = os.environ.get('EMAIL_PW') #fetch from environment credentials
+
 DEBUG = True
 
 # instantiate the app
@@ -225,9 +230,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 # enable CORS
-CORS(app)
-
-email_pw = os.environ.get('EMAIL_PW') #fetch from environment credentials
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 """Flask Mail Configuration"""
 app.config['TESTING'] = False
@@ -236,7 +239,7 @@ app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_DEBUG'] = False #same as Debug mode
-app.config['MAIL_USERNAME'] = 'textcruncher@gmail.com'
+app.config['MAIL_USERNAME'] = 'textcruncher2.0@gmail.com'
 app.config['MAIL_PASSWORD'] = email_pw
 app.config['MAIL_DEFAULT_SENDER'] = None
 app.config['MAIL_MAX_EMAILS'] = None
@@ -251,37 +254,41 @@ mail= Mail(app)
 
 @app.route('/send-mail', methods=['POST'])
 def send_mail():
+    receiver = []
     post_data = request.get_json()
     email = post_data.get('EMAIL')
     text = post_data.get('MESSAGE')
     filename = post_data.get('FILE')
 
+    receiver = []
+    receiver = email.split(',')
+
     with app.open_resource('./static/user_pulls/Output_'+filename+'.xlsx') as fp:
-        msg = Message('Below is an Attached File of your Query Results', sender='textcruncher@gmail.com', recipients=email)
+        msg = Message('Below is an Attached File of your Query Results', sender='textcruncher@gmail.com', recipients=receiver)
         msg.attach('Output_'+filename+'.xlsx', 'file/xlsx', fp.read())
         msg.body = text
         mail.send(msg)
-    # return render_template('downloads.html', filename=filename)
+    return jsonify({msg:"DONE"})
 
-# @app.route('/')
+# @app.route('/dummy',methods=['GET','POST'])
 # def home():
-#     # return render_template('index.html')
+#     return
 
-@app.route('/scrape', methods=['POST'])
+@app.route('/', methods=['POST'])
 def scrape_now():
     #OBtains data from html form and pass it through python to another html page
     # queries = request.form['queries'] #receives from html form as String
     # return render_template('downloads.html', filename=current_timestamp)
+    fileName = datetime.now().strftime('%m%d%Y%H%M%S')
+
+    response_object = {'status': 'success'}
+
     post_data = request.get_json()
     queries = post_data.get('queries')    
     lst_queries = queries.split(',') #split by ','
-    current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-    result = scrape(lst_queries, current_timestamp)
-    return jsonify(result)
+    response_object["fileName"] = scrape(lst_queries, fileName)
 
-@app.route('/restart', methods=['POST'])
-def restart():
-    restart_program()
+    return jsonify(response_object)
 
 @app.route('/return-file/<filename>')
 def return_file(filename):
@@ -290,4 +297,4 @@ def return_file(filename):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True)

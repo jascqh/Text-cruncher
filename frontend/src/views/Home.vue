@@ -13,7 +13,6 @@
       <button type="button" id="btnFetch" class="btn btn-primary mb-2" @click="validator()">Scrape!
         <i v-if = "loadingButton" class = "spinner-border spinner-border-sm"></i>
       </button>
-    
   </b-container>
 </div>
   
@@ -36,15 +35,14 @@ export default {
   methods: {
 
     scrape: function() {
-      const path = 'http://localhost:5000/scrape';
+      const path = 'http://localhost:5000';
       const help = {queries: this.payload}
       axios.post(path, help)
-
+      // .then(() => {
+      //   return axios.get(path)
+      // })
       .then((res) => {
-        this.fileName = res.data
-      })
-      .then(() =>{
-          axios.post('http://localhost:5000/restart')
+        this.fileName = res.data.fileName;
       })
       .then(() => {
         this.$router.push({path : '/download/' + this.fileName});
