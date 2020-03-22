@@ -10,11 +10,13 @@
 
             <b-collapse id="nav-collapse" is-nav >
             <b-navbar-nav class="ml-auto">
+                <b-nav-item v-if="this.isLoggedIn">{{this.currentUser}}</b-nav-item>
                 <b-nav-item to="/" >Home</b-nav-item>
                 <b-nav-item to="/about">About</b-nav-item>
                 <b-nav-item to="/login">Login</b-nav-item>
                 <b-nav-item to="/register">Register</b-nav-item>
                 <b-nav-item to="/history">History</b-nav-item>
+                <li><button v-on:click="logout" class="btn btn-large btn-extended grey lighten-4 black-text">Logout</button></li>
             </b-navbar-nav>
             </b-collapse>
         </b-navbar>
@@ -22,10 +24,10 @@
 
 </template>
 
-<script>
+// <script>
 import firebase from 'firebase';
 export default {
-  name: 'navbar',
+  name: 'header',
   data() {
     return {
       isLoggedIn: false,
@@ -44,7 +46,7 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.$router.go({ path: this.$router.path });
+          this.$router.push('/login');
         });
     }
   }
