@@ -18,9 +18,10 @@ const routes = [
     component: About
   },
   {
-    path: "/download",
+    path: "/download/:fileName",
     name: "Download",
-    component: Download
+    component: Download,
+    props:true
   }
 ];
 

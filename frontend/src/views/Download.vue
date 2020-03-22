@@ -19,6 +19,7 @@
                     Send to Mail
             </button>
       </div>
+      <a>{{fileName}}</a>
   </b-container>
 
    <b-modal
@@ -38,7 +39,6 @@
             <b-form-input
                 id="recipient-email"
                 v-model="email"
-                :state="nameState"
                 required
             ></b-form-input>
             </b-form-group>
@@ -59,29 +59,56 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        email: '',
-        message:''
-      }
-    },
-    methods: {
-      resetModal() {
-        this.name = ''
-        this.nameState = null
-      },
-      handleOk(bvModalEvt) {
-        // Prevent modal from closing
-        bvModalEvt.preventDefault()
-        // Trigger submit handler
-        this.handleSubmit()
-      },
-      handleSubmit() {
-        this.$nextTick(() => {
-          this.$bvModal.hide('email_popup')
-        })
-      }
+import axios from 'axios';
+import swal from 'sweetalert';
+
+export default {
+
+  data() {
+    return {
+      fileName:'',
+      email: '',
+      message:''
     }
+  },
+  methods: {
+    resetModal() {
+      this.email = ''
+      this.message = ''
+    },
+    handleOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault()
+      // Trigger submit handler
+      this.handleSubmit()
+    },
+    handleSubmit() {
+      this.$nextTick(() => {
+        this.$bvModal.hide('email_popup')
+      })
+      
+      const payload = {EMAIL: this.email,
+                      MESSAGE: this.message,
+                      FILE: this.fileName}
+      const path = 'http://localhost:5000/send-mail';
+      axios.post(path, payload)
+      .then(() =>{
+          swal({
+          title: "Email Sent",
+          text: "Please check your inbox",
+          icon: "success",
+          button: "I understand"
+        });
+      })
+    },
+
+     fetchPost() {
+       this.fileName = this.$route.params.fileName;
+      },
+  },
+
+  mounted() {
+    this.fetchPost();
   }
+}
 </script>

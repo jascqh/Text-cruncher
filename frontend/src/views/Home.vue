@@ -13,7 +13,6 @@
       <button type="button" id="btnFetch" class="btn btn-primary mb-2" @click="validator()">Scrape!
         <i v-if = "loadingButton" class = "spinner-border spinner-border-sm"></i>
       </button>
-{{msg}}
     
   </b-container>
 </div>
@@ -28,9 +27,9 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      fileName:'',
       payload: '',
       loadingButton: false,
-      msg:[]
     }
   },
 
@@ -40,16 +39,16 @@ export default {
       const path = 'http://localhost:5000/scrape';
       const help = {queries: this.payload}
       axios.post(path, help)
+
       .then((res) => {
-          this.msg = res.data;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          this.msg = 'fail'
-          console.error(error);
-        }).then(() =>{
-          this.$router.push('download');
-        })
+        this.fileName = res.data
+      })
+      .then(() =>{
+          axios.post('http://localhost:5000/restart')
+      })
+      .then(() => {
+        this.$router.push({path : '/download/' + this.fileName});
+      })
     },
 
     load: function() {

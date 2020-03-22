@@ -117,6 +117,7 @@ def scrape(lst_query, fileName):
     writer.close()
     sel_driver.quit() #closes all instances of sel_driver
 
+    return fileName
     # excel_data_df = pandas.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
     # json_str = excel_data_df.to_json()
     # return json_str
@@ -224,7 +225,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 # enable CORS
-CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app)
 
 email_pw = os.environ.get('EMAIL_PW') #fetch from environment credentials
 
@@ -248,16 +249,15 @@ mail= Mail(app)
 
 # Routing
 
-@app.route('/send-mail/', methods=['POST'])
+@app.route('/send-mail', methods=['POST'])
 def send_mail():
-    receiver = []
-    emailadd = request.form['email_address']
-    receiver = emailadd.split(',')
-    # receiver.append(emailadd.split(','))
-    text = request.form['msg_txt']  # receives from html form as String
-    filename = request.form['fileName']
+    post_data = request.get_json()
+    email = post_data.get('EMAIL')
+    text = post_data.get('MESSAGE')
+    filename = post_data.get('FILE')
+
     with app.open_resource('./static/user_pulls/Output_'+filename+'.xlsx') as fp:
-        msg = Message('Below is an Attached File of your Query Results', sender='textcruncher@gmail.com', recipients=receiver)
+        msg = Message('Below is an Attached File of your Query Results', sender='textcruncher@gmail.com', recipients=email)
         msg.attach('Output_'+filename+'.xlsx', 'file/xlsx', fp.read())
         msg.body = text
         mail.send(msg)
@@ -267,24 +267,21 @@ def send_mail():
 # def home():
 #     # return render_template('index.html')
 
-@app.route('/scrape', methods=['GET', 'POST'])
+@app.route('/scrape', methods=['POST'])
 def scrape_now():
     #OBtains data from html form and pass it through python to another html page
     # queries = request.form['queries'] #receives from html form as String
     # return render_template('downloads.html', filename=current_timestamp)
+    post_data = request.get_json()
+    queries = post_data.get('queries')    
+    lst_queries = queries.split(',') #split by ','
+    current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
+    result = scrape(lst_queries, current_timestamp)
+    return jsonify(result)
 
-    result = {'status': 'success'}
-    if request.method == 'POST':
-        post_data = request.get_json()
-        queries = post_data.get('queries')    
-        lst_queries = queries.split(',') #split by ','
-        current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-        result = scrape(lst_queries, current_timestamp)
-
-    else:
-        result['books'] = 'fail again'
+@app.route('/restart', methods=['POST'])
+def restart():
     restart_program()
-
 
 @app.route('/return-file/<filename>')
 def return_file(filename):
