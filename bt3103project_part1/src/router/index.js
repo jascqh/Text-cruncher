@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import firebase from "firebase";
 import Home from "../views/Home.vue";
 import About from"../views/About.vue";
 import Login from "../views/Login.vue";
@@ -16,25 +15,17 @@ let router = new VueRouter({
       path: '/',
       name: 'Home',
       component: Home,
-      meta: {
-        requiresAuth: true
-      }
     },
     {
       path: '/login',
       name: 'login',
       component: Login,
-      meta: {
-        requiresGuest: true
-      }
     },
     {
       path: '/register',
       name: 'register',
       component: Register,
-      meta: {
-        requiresGuest: true
-      }
+
     },
     {
       path: "/about",
@@ -43,9 +34,6 @@ let router = new VueRouter({
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: About,
-    meta: {
-      requiresAuth: true
-    }
     // () =>
     //   import(/* webpackChunkName: "about" */ "../views/About.vue")
     },
@@ -53,48 +41,14 @@ let router = new VueRouter({
     path: "/history",
     name: "History",
     component: History,
-    meta: {
-      requiresAuth: true
-    }
     }
   ]
 });
 
-// Nav Guard
-router.beforeEach((to, from, next) => {
-  // Check for requiresAuth guard
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    // Check if NO logged user
-    if (!firebase.auth().currentUser) {
-      // Go to login
-      next({
-        path: '/login',
-        query: {
-          redirect: to.fullPath
-        }
-      });
-    } else {
-      // Proceed to route
-      next();
-    }
-  } else if (to.matched.some(record => record.meta.requiresGuest)) {
-    // Check if NO logged user
-    if (firebase.auth().currentUser) {
-      // Go to login
-      next({
-        path: '/',
-        query: {
-          redirect: to.fullPath
-        }
-      });
-    } else {
-      // Proceed to route
-      next();
-    }
-  } else {
-    // Proceed to route
-    next();
-  }
-});
+// const router = new VueRouter({
+//   mode: "history",
+//   base: process.env.BASE_URL,
+//   routes
+// });
 
 export default router;
