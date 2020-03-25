@@ -11,6 +11,7 @@ import firebase from './firebase.js';
 Vue.prototype.$firebase = firebase;
 Vue.config.productionTip = false;
 
+
 new Vue({
   router,
   store,

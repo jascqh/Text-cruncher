@@ -5,9 +5,7 @@
                 <img src="../assets/TextCruncherLogo.jpg" height ="30" width ="30">
             </b-navbar-brand>
             <b-navbar-brand a>TextCruncher</b-navbar-brand>
-            
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
             <b-collapse id="nav-collapse" is-nav >
             <b-navbar-nav class="ml-auto">
                 <b-nav-item to="/" >Home</b-nav-item>
@@ -15,6 +13,7 @@
                 <b-nav-item to="/login">Login</b-nav-item>
                 <b-nav-item to="/register">Register</b-nav-item>
                 <b-nav-item to="/history">History</b-nav-item>
+                <li><button v-on:click="logout" class="btn btn-large btn-extended grey lighten-4 black-text">Logout</button></li>
             </b-navbar-nav>
             </b-collapse>
         </b-navbar>
@@ -25,7 +24,7 @@
 <script>
 import firebase from 'firebase';
 export default {
-  name: 'navbar',
+  name: 'header',
   data() {
     return {
       isLoggedIn: false,
@@ -36,6 +35,7 @@ export default {
     if (firebase.auth().currentUser) {
       this.isLoggedIn = true;
       this.currentUser = firebase.auth().currentUser.email;
+      console.log(this.currentUser); 
     }
   },
   methods: {

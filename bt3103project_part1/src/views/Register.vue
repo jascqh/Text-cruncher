@@ -45,7 +45,7 @@ export default {
          data => {
             var user = data.user;
             alert(`Account Created for ${user.email}`);
-            this.$router.push('/');
+            this.$router.replace({ name: "Home" });; 
           },
           err => {
             alert(err.message);
