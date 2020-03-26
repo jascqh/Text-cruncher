@@ -5,6 +5,7 @@ import About from"../views/About.vue";
 import Login from "../views/Login.vue";
 import History from "../views/History.vue";
 import Register from "../views/Register.vue";
+import Download from "../views/Download.vue";
 
 
 Vue.use(VueRouter);
@@ -29,13 +30,13 @@ let router = new VueRouter({
     },
     {
       path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: About,
-    // () =>
-    //   import(/* webpackChunkName: "about" */ "../views/About.vue")
+      name: "About",
+      component: About,
+    },
+    {
+      path: "/download",
+      name: "Download",
+      component: Download,
     },
     {
     path: "/history",

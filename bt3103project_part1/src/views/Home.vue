@@ -13,8 +13,6 @@
       <button type="button" id="btnFetch" class="btn btn-primary mb-2" @click="validator()">Scrape!
         <i v-if = "loadingButton" class = "spinner-border spinner-border-sm"></i>
       </button>
-{{msg}}
-    
   </b-container>
 </div>
   
@@ -30,15 +28,9 @@ import database from '../firebase.js'
 export default {
   data() {
     return {
+      fileName:'',
       payload: '',
       loadingButton: false,
-      msg:[],
-      item : {
-        Email: "",
-        Date: "",
-        Json: "",
-        Name: ""
-      } 
     }
   },
 
@@ -51,21 +43,18 @@ export default {
     },
 
     scrape: function() {
-      const path = 'http://localhost:5000/scrape';
+      const path = 'http://localhost:5000';
       const help = {queries: this.payload}
       axios.post(path, help)
+      // .then(() => {
+      //   return axios.get(path)
+      // })
       .then((res) => {
-          this.msg = res.data;
-          this.item.Email = "put email here";
-          this.item.Date = new Date();
-          this.item.Json = res.data;
-          this.storeItem();
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          this.msg = 'fail'
-          console.error(error);
-        });
+        this.fileName = res.data.fileName;
+      })
+      .then(() => {
+        this.$router.push({path : '/download/' + this.fileName});
+      })
     },
 
     load: function() {
