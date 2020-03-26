@@ -2,10 +2,10 @@
 <div class='container'>
   <b-container align="center">
       <slideShow align="center"></slideShow>
-      <p>Please input at least one query up to 5 at once.</p>
+     <p>Please input at least one query up to 5 at once.</p>
     <b-row align-v = "center">
       <b-form-textarea v-model="payload"
-      :placeholder="'Enter your queries here \nEg. Quary 1, Quary 2, Quary 3 ... Up to 5 Quaries'"
+      :placeholder="'Enter your queries here \nEg. Query 1, Query 2, Query 3 ... Up to 5 Queries'"
       :rows="2"
       :max-rows="5"></b-form-textarea>
     </b-row>
@@ -13,6 +13,8 @@
       <button type="button" id="btnFetch" class="btn btn-primary mb-2" @click="validator()">Scrape!
         <i v-if = "loadingButton" class = "spinner-border spinner-border-sm"></i>
       </button>
+{{msg}}
+    
   </b-container>
 </div>
   
@@ -22,31 +24,48 @@
 import SlideShow from "../components/slideShow.vue"
 import swal from 'sweetalert';
 import axios from 'axios';
+//import LoginVue from './Login.vue'
+import database from '../firebase.js'
 
 export default {
   data() {
     return {
-      fileName:'',
       payload: '',
       loadingButton: false,
+      msg:[],
+      item : {
+        Email: "",
+        Date: "",
+        Json: "",
+        Name: ""
+      } 
     }
   },
 
   methods: {
 
+    storeItem: function() { 
+      //save to database
+      database.collection('files').doc().set(this.item)
+      alert("I am in the DB :D")
+    },
+
     scrape: function() {
-      const path = 'http://localhost:5000';
+      const path = 'http://localhost:5000/scrape';
       const help = {queries: this.payload}
       axios.post(path, help)
-      // .then(() => {
-      //   return axios.get(path)
-      // })
       .then((res) => {
-        this.fileName = res.data.fileName;
-      })
-      .then(() => {
-        this.$router.push({path : '/download/' + this.fileName});
-      })
+          this.msg = res.data;
+          this.item.Email = "put email here";
+          this.item.Date = new Date();
+          this.item.Json = res.data;
+          this.storeItem();
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          this.msg = 'fail'
+          console.error(error);
+        });
     },
 
     load: function() {

@@ -30,3 +30,4 @@ smart-open==1.9.0
 soupsieve==2.0
 urllib3==1.25.8
 Werkzeug==1.0.0
+XlsxWriter==1.2.8
