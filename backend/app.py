@@ -18,12 +18,7 @@ from firebase_admin import auth
 
 
 """ --------------------Main Script-------------------------- """
-#Firebase 
-# firebase = firebase.FirebaseApplication("https://text-cruncher-4b993.firebaseio.com/users/AIvcpuRaWZatexTXH4pE", None)
-# user = auth.get_user_by_email(email)
-# print('Successfully fetched user data: {0}'.format(user.uid))
 
-#Readability
 def prGreen(skk): print("\033[92m {}\033[00m" .format(skk))
 def prCyan(skk): print("\033[96m {}\033[00m" .format(skk))
 
@@ -126,13 +121,7 @@ def scrape(lst_query, fileName):
 
     excel_data_df = pd.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
     json_str = excel_data_df.to_json()
-    # data = {
-    #     'Json':json_str,
-    #     'Email':"example@email.com",
-    #     'Time': str(datetime.now())
-    # }
-    # res = firebase.post('/AIvcpuRaWZatexTXH4pE/files', data)
-
+  
     return json_str
 
 def pullContent(soup):

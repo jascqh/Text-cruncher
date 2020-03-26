@@ -56,9 +56,10 @@ export default {
       axios.post(path, help)
       .then((res) => {
           this.msg = res.data;
-          this.item.Email = "put email here";
+          this.item.Email = this.$session.get('email');
           this.item.Date = new Date();
           this.item.Json = res.data;
+          this.item.Name = this.payload;
           this.storeItem();
         })
         .catch((error) => {
