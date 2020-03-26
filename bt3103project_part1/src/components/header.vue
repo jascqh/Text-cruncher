@@ -15,7 +15,6 @@
                 <b-nav-item to="/login">Login</b-nav-item>
                 <b-nav-item to="/register">Register</b-nav-item>
                 <b-nav-item to="/history">History</b-nav-item>
-                <b-nav-item to="/download">Download</b-nav-item>
             </b-navbar-nav>
             </b-collapse>
         </b-navbar>
