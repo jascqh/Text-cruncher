@@ -60,7 +60,7 @@ export default {
       }
       var csv = "Serial No,Search Query,URL link,Title of Article,Text Summary\n"
       data.forEach(function(row) { 
-        csv += row.join(';');
+        csv += row.join(',');
         csv += "/r/n";
         console.log(csv)
       });
