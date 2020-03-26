@@ -56,12 +56,12 @@ let router = new VueRouter({
     }
     },
 
-    {
-      path: "/download/:fileName",
-      name: "Download",
-      component: Download,
-      props:true
-    }
+    // {
+    //   path: "/download/:fileName",
+    //   name: "Download",
+    //   component: Download,
+    //   props:true
+    // }
   ]
 });
 
