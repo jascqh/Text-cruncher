@@ -2,7 +2,6 @@
 <div class="col-lg-6" align="center">
     <div class="col-sm-6" align="center">
         <b-carousel
-            v-model="slide"
             :interval="4000"
         >
             <b-carousel-slide>
