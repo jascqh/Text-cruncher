@@ -43,12 +43,10 @@ export default {
     },
 
     scrape: function() {
-      const path = 'http://localhost:5000';
+      const path = 'http://localhost:5000/scrape';
       const help = {queries: this.payload}
       axios.post(path, help)
-      // .then(() => {
-      //   return axios.get(path)
-      // })
+
       .then((res) => {
         this.fileName = res.data.fileName;
       })

@@ -10,8 +10,8 @@ import Download from "../views/Download.vue";
 
 Vue.use(VueRouter);
 
-let router = new VueRouter({
-  routes: [
+
+ const routes = [
     {
       path: '/',
       name: 'Home',
@@ -34,22 +34,22 @@ let router = new VueRouter({
       component: About,
     },
     {
-      path: "/download",
+      path: "/download/:fileName",
       name: "Download",
       component: Download,
+      props : true,
     },
     {
     path: "/history",
     name: "History",
     component: History,
     }
-  ]
-});
+  ];
 
-// const router = new VueRouter({
-//   mode: "history",
-//   base: process.env.BASE_URL,
-//   routes
-// });
+const router = new VueRouter({
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes
+});
 
 export default router;

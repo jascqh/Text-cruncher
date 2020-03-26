@@ -5,6 +5,7 @@ import os
 import re
 import time
 import xlsxwriter
+import myCred
 from bs4 import BeautifulSoup
 from gensim.summarization import summarize
 from selenium import webdriver
@@ -13,16 +14,9 @@ from datetime import datetime
 from flask_mail import Mail, Message
 from flask import Flask, render_template, request, send_file, jsonify
 from flask_cors import CORS
-from firebase import firebase
-from firebase_admin import auth
 
 
 """ --------------------Main Script-------------------------- """
-#Firebase 
-# firebase = firebase.FirebaseApplication("https://text-cruncher-4b993.firebaseio.com/users/AIvcpuRaWZatexTXH4pE", None)
-# user = auth.get_user_by_email(email)
-# print('Successfully fetched user data: {0}'.format(user.uid))
-
 #Readability
 def prGreen(skk): print("\033[92m {}\033[00m" .format(skk))
 def prCyan(skk): print("\033[96m {}\033[00m" .format(skk))
@@ -122,21 +116,15 @@ def scrape(lst_query, fileName):
     df_results = None
     writer.save()
     writer.close()
-    sel_driver.quit() #closes all instances of sel_driver
+    # sel_driver.quit() #closes all instances of sel_driver
 
-    excel_data_df = pd.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
-    json_str = excel_data_df.to_json()
-    # data = {
-    #     'Json':json_str,
-    #     'Email':"example@email.com",
-    #     'Time': str(datetime.now())
-    # }
-    # res = firebase.post('/AIvcpuRaWZatexTXH4pE/files', data)
-
-    return json_str
+    return fileName
+    # excel_data_df = pandas.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
+    # json_str = excel_data_df.to_json()
+    # return json_str
 
 def pullContent(soup):
-    print("Pulling")
+    # print("Pulling")
     results = ""
     links = soup.select("p")
     if (len(links) == 0):
@@ -162,10 +150,10 @@ def pullContent(soup):
 
 # Main content Generator with BS4 and Selenium if BS4 fails to scrape
 def get_content(url):
-    prCyan('BS4 Pull Request...')
+    # prCyan('BS4 Pull Request...')
     headers = requests.utils.default_headers()
     headers.update({
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
     })
     page = ''
     while page == '':
@@ -182,8 +170,8 @@ def get_content(url):
     raw_html = page.content
     soup = BeautifulSoup(raw_html, 'html.parser')
     results = pullContent(soup)
-    prGreen('BS4 Original Content:')
-    print(results)
+    # prGreen('BS4 Original Content:')
+    # print(results)
     headers = soup.select("h1")
     header = ""
     if len(headers) != 0:
@@ -196,7 +184,7 @@ def get_content(url):
 
     # Check if content can be pulled with BS4
     """word count minimum"""
-    validThreshold = 300
+    validThreshold = 400
     if len(results.split(" ")) < validThreshold:
         # Selenium Pull
         sel_driver.implicitly_wait(1)  # reduce error
@@ -204,27 +192,37 @@ def get_content(url):
         soup = BeautifulSoup(sel_driver.page_source, "html.parser")
         results = pullContent(soup)
         prCyan('Selenium Original Content:')
-        print(results)
+        # print(results)
 
     """Output with summariser"""
     # apply final regex clean up before summarising
     results = re.sub(r"\{(.*?)\}+", '', results) #removes anything enclosing {}
     results = re.sub(r"(#[A-Za-z]+)",'', results) #removes hashtags
     results = re.sub(r"(^.+@[^\.].*\.[a-z]{2,}$)",'', results)  #removes email
-    prCyan('After Regex...')
-    print(results)
+    # prCyan('After Regex...')
+    # print(results)
     final_results = summarize(results)
-    prCyan('With text summary:')
-    print(final_results)
+    # prCyan('With text summary:')
+    # print(final_results)
     final_text_summary.append(header)
     final_text_summary.append(final_results)
 
     return final_text_summary
 
+def restart_program():
+    """Restarts the current program.
+    Note: this function does not return. Any cleanup action (like
+    saving data) must be done before calling this function."""
+    python = sys.executable
+    os.execl(python, python, * sys.argv)
 
 """-------------------------------FLASK APPLICATION------------------------------------""" 
 ##localhost5000
 # configuration
+
+myCred.setVar()
+email_pw = os.environ.get('EMAIL_PW') #fetch from environment credentials
+
 DEBUG = True
 
 # instantiate the app
@@ -234,8 +232,6 @@ app.config.from_object(__name__)
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-email_pw = os.environ.get('EMAIL_PW') #fetch from environment credentials
-
 """Flask Mail Configuration"""
 app.config['TESTING'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -243,7 +239,7 @@ app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_DEBUG'] = False #same as Debug mode
-app.config['MAIL_USERNAME'] = 'textcruncher@gmail.com'
+app.config['MAIL_USERNAME'] = 'textcruncher2.0@gmail.com'
 app.config['MAIL_PASSWORD'] = email_pw
 app.config['MAIL_DEFAULT_SENDER'] = None
 app.config['MAIL_MAX_EMAILS'] = None
@@ -256,9 +252,8 @@ mail= Mail(app)
 
 # Routing
 
-@app.route('/send-mail/', methods=['POST'])
+@app.route('/send-mail', methods=['POST'])
 def send_mail():
-    receiver = []
     emailadd = request.form['email_address']
     receiver = emailadd.split(',')
     # receiver.append(emailadd.split(','))
@@ -269,29 +264,20 @@ def send_mail():
         msg.attach('Output_'+filename+'.xlsx', 'file/xlsx', fp.read())
         msg.body = text
         mail.send(msg)
-    # return render_template('downloads.html', filename=filename)
+    return jsonify({msg:"DONE"})
 
-# @app.route('/')
-# def home():
-#     # return render_template('index.html')
-
-@app.route('/scrape', methods=['GET', 'POST'])
+@app.route('/scrape', methods=['POST'])
 def scrape_now():
     #OBtains data from html form and pass it through python to another html page
     # queries = request.form['queries'] #receives from html form as String
     # return render_template('downloads.html', filename=current_timestamp)
-
-    result = {'status': 'success'}
-    if request.method == 'POST':
-        post_data = request.get_json()
-        queries = post_data.get('queries')    
-        lst_queries = queries.split(',') #split by ','
-        current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-        result = scrape(lst_queries, current_timestamp)
-
-    else:
-        result['books'] = 'fail again'
-    return jsonify(result)
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+    queries = post_data.get('queries')    
+    lst_queries = queries.split(',') #split by ','
+    current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
+    response_object ['fileName']= scrape(lst_queries, current_timestamp)
+    return jsonify(response_object)
 
 
 @app.route('/return-file/<filename>')
@@ -301,4 +287,4 @@ def return_file(filename):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True)
