@@ -41,12 +41,18 @@ Vue.use(VueRouter);
       path: "/about",
       name: "About",
       component: About,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: "/download/:fileName",
       name: "Download",
       component: Download,
       props : true,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
     path: "/history",

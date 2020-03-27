@@ -59,7 +59,7 @@ def scrape(lst_query, fileName):
         webresults = BeautifulSoup(sel_driver.page_source, "html.parser")
         for info in (webresults.find_all("div", {"class", "g"})):
             links = info.find("a").get('href')
-            if "https" not in links:
+            if "http" not in links:
                 continue
             if links in listOfLinks:
                 continue
@@ -254,17 +254,18 @@ mail= Mail(app)
 
 @app.route('/send-mail', methods=['POST'])
 def send_mail():
-    emailadd = request.form['email_address']
+    post_data = request.get_json()
+    emailadd = post_data.get('EMAIL')
     receiver = emailadd.split(',')
     # receiver.append(emailadd.split(','))
-    text = request.form['msg_txt']  # receives from html form as String
-    filename = request.form['fileName']
+    text = post_data.get('MESSAGE')  # receives from html form as String
+    filename = post_data.get('FILE')
     with app.open_resource('./static/user_pulls/Output_'+filename+'.xlsx') as fp:
-        msg = Message('Below is an Attached File of your Query Results', sender='textcruncher@gmail.com', recipients=receiver)
+        msg = Message('Below is an Attached File of your Query Results', sender='textcruncher2.0@gmail.com', recipients=receiver)
         msg.attach('Output_'+filename+'.xlsx', 'file/xlsx', fp.read())
         msg.body = text
         mail.send(msg)
-    return jsonify({msg:"DONE"})
+    return jsonify({'status':"DONE"})
 
 @app.route('/scrape', methods=['POST'])
 def scrape_now():

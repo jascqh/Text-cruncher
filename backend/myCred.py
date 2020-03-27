@@ -1,4 +1,4 @@
 import os
 # Set environment variables
 def setVar():
-    os.environ['EMAIL_PASSWORD'] = 'BT310321092358'
+    os.environ['EMAIL_PW'] = 'BT310321092358'

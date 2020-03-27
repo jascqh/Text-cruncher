@@ -5,7 +5,7 @@
       <h3 class="text-muted">Your File is Ready to be Downloaded</h3>
       
       <div class="container-fluid" align="center">
-        <a href="/" data-toggle="tooltip" data-placement="left" title="Back to submit more queries!">
+        <a data-toggle="tooltip" data-placement="left" title="Back to submit more queries!" @click="backHome()">
             <img src="https://visualpharm.com/assets/576/Back%20Arrow-595b40b65ba036ed117d1ee7.svg" alt="Submit" width="38">
         </a>
         <button type="button" class='btn btn-primary btn-xlg'>
@@ -72,6 +72,11 @@ export default {
     }
   },
   methods: {
+
+    backHome() {
+      this.$router.push({path : '/'});
+    },
+
     resetModal() {
       this.email = ''
       this.message = ''
