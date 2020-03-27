@@ -6,8 +6,12 @@
       <ul>
         <li v-for="(item , index) in itemsList" v-bind:key="item.id" >
             {{item.Name}}
-            <button name="Download" v-bind="item.id" v-on:click="jsonToCSV(item.Json)">Download</button>
             <button name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)">Delete</button>
+            <download-csv
+              :data   = convertData(item.Json)>
+              Download Data
+              <img src="download_icon.png">
+          </download-csv>
         </li>
     </ul>
     </div>
@@ -17,6 +21,7 @@
 
 <script>
 import database from '../firebase.js'
+
 export default {
   data(){
     return{
@@ -45,31 +50,21 @@ export default {
       this.itemsList.splice(index,1)
       //Msg to be displayed. Can be made as an alert
       console.log("Item Deleted Successfully")
+
     },
-
-    jsonToCSV:function(json_str){
+    convertData:function(json_str){
       var json = JSON.parse(json_str)
-      var data = []
+      var datas = []
+      console.log(json)
       for (let i = 0; i < Object.keys(Object.values(json)[0]).length; i++) { 
-          var row = []
-          for (var key in json) { 
-            row.push(String(json[key][i]))
-          }
-          data.push(row)
-          row = []
+        var data = {}
+        for (var key in json) { 
+          data[key] = json[key][i]
+        }
+        datas.push(data)
       }
-      var csv = "Serial No,Search Query,URL link,Title of Article,Text Summary\n"
-      data.forEach(function(row) { 
-        csv += row.join(',');
-        csv += "/r/n";
-        console.log(csv)
-      });
-      var hiddenElement = document.createElement('a');
-      hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-      hiddenElement.target = '_blank';
-      hiddenElement.download = 'query.csv';
-      hiddenElement.click();
-
+      console.log(datas)
+      return datas
 
     }
     

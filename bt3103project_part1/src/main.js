@@ -7,6 +7,9 @@ import router from "./router";
 import store from "./store";
 import firebase from './firebase.js';
 import VueSessionStorage from 'vue-sessionstorage'
+import JsonCSV from 'vue-json-csv'
+ 
+Vue.component('downloadCsv', JsonCSV)
 
 
 /* Bind firebase to your Vue instance */
