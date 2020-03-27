@@ -5,8 +5,13 @@
     <div class="bg-secondary text-light">
       <ul>
         <li v-for="(item , index) in itemsList" v-bind:key="item.id" >
-            {{item.id}}
+            {{item.Name}}
             <button name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)">Delete</button>
+            <download-csv
+              :data   = convertData(item.Json)>
+              Download Data
+              <img src="download_icon.png">
+          </download-csv>
         </li>
     </ul>
     </div>
@@ -16,6 +21,7 @@
 
 <script>
 import database from '../firebase.js'
+
 export default {
   data(){
     return{
@@ -32,6 +38,7 @@ export default {
             item=doc.data()
             item.id=doc.id
             this.itemsList.push(item)
+            item = {}
         })
       })
       
@@ -43,9 +50,21 @@ export default {
       this.itemsList.splice(index,1)
       //Msg to be displayed. Can be made as an alert
       console.log("Item Deleted Successfully")
-    },
 
-    jsonToExcel:function(){
+    },
+    convertData:function(json_str){
+      var json = JSON.parse(json_str)
+      var datas = []
+      console.log(json)
+      for (let i = 0; i < Object.keys(Object.values(json)[0]).length; i++) { 
+        var data = {}
+        for (var key in json) { 
+          data[key] = json[key][i]
+        }
+        datas.push(data)
+      }
+      console.log(datas)
+      return datas
 
     }
     
@@ -59,13 +78,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-header{
+/* header{
     background:rgb(122, 63, 100);
     padding:10px;
     border-style: solid;
     border-color:black;
     border-width: 2px;
-}
+} */
 h2{
   text-align: center
 }

@@ -17,7 +17,6 @@ from flask_cors import CORS
 
 
 """ --------------------Main Script-------------------------- """
-#Readability
 def prGreen(skk): print("\033[92m {}\033[00m" .format(skk))
 def prCyan(skk): print("\033[96m {}\033[00m" .format(skk))
 
@@ -116,12 +115,12 @@ def scrape(lst_query, fileName):
     df_results = None
     writer.save()
     writer.close()
-    # sel_driver.quit() #closes all instances of sel_driver
+    sel_driver.quit() #closes all instances of sel_driver
 
-    return fileName
-    # excel_data_df = pandas.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
-    # json_str = excel_data_df.to_json()
-    # return json_str
+    excel_data_df = pd.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
+    json_str = excel_data_df.to_json()
+  
+    return json_str
 
 def pullContent(soup):
     # print("Pulling")

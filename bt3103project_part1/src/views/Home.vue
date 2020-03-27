@@ -53,6 +53,18 @@ export default {
       .then(() => {
         this.$router.push({path : '/download/' + this.fileName});
       })
+          this.msg = res.data;
+          this.item.Email = this.$session.get('email');
+          this.item.Date = new Date();
+          this.item.Json = res.data;
+          this.item.Name = this.payload;
+          this.storeItem();
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          this.msg = 'fail'
+          console.error(error);
+        });
     },
 
     load: function() {
