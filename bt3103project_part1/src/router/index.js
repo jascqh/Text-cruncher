@@ -63,6 +63,12 @@ Vue.use(VueRouter);
     }
     },
 
+    {
+      path: "/download/:fileName",
+      name: "Download",
+      component: Download,
+      props:true
+    }
   ];
 
 const router = new VueRouter({
