@@ -62,6 +62,7 @@ Vue.use(VueRouter);
       requiresAuth: true
     }
     },
+
   ];
 
 const router = new VueRouter({
