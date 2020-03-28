@@ -6,6 +6,7 @@ import re
 import time
 import xlsxwriter
 import myCred
+import openpyxl
 from bs4 import BeautifulSoup
 from gensim.summarization import summarize
 from selenium import webdriver
@@ -104,10 +105,13 @@ def scrape(lst_query):
         prCyan("Resuming")
 
     try:
-        os.remove("./static/user_pulls/output.xlsx")
+        wb = openpyxl.load_workbook('./static/user_pulls/output.xlsx')
+        std = wb.get_sheet_by_name('Results')
+        wb.remove_sheet(std)
+        wb.save('./static/user_pulls/output.xlsx')
     except:
         pass
-    
+
     # Output to Excel File
     df_results = pd.DataFrame(final_output, columns=final_header)
     writer = pd.ExcelWriter('./static/user_pulls/output.xlsx', engine='xlsxwriter')

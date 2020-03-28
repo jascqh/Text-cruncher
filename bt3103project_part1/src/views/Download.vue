@@ -21,6 +21,7 @@
                     Send to Mail
             </button>
       </div>
+      <a>{{json}}</a>
 
   </b-container>
 
