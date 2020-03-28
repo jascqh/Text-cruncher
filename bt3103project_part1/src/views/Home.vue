@@ -60,13 +60,8 @@ export default {
           this.item.Json = res.data.results;
           this.item.Name = this.payload;
           this.storeItem();
-          this.$router.push({path : '/download/' + res.data.results});
+          this.$router.push({path : '/download'});
         })
-      .catch((error) => {
-          // eslint-disable-next-line
-          this.msg = 'fail'
-          console.error(error);
-        });
     },
 
     load: function() {

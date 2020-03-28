@@ -57,13 +57,25 @@ def scrape(lst_query, fileName):
 
         webresults = BeautifulSoup(sel_driver.page_source, "html.parser")
         for info in (webresults.find_all("div", {"class", "g"})):
-            links = info.find("a").get('href')
-            if "http" not in links:
-                continue
-            if links in listOfLinks:
-                continue
-            else:
-                listOfLinks.append(links)
+
+            try:
+                links = info.find("a").get('href')
+                if "http" not in links:
+                    continue
+                if links in listOfLinks:
+                    continue
+                else:
+                    listOfLinks.append(links)
+
+                links = info.find("a").get('href')
+                if "http" not in links:
+                    continue
+                if links in listOfLinks:
+                    continue
+                else:
+                    listOfLinks.append(links)
+            except:
+                break;
         #Serialise Output according to number of links in each query
         final_counter = len(listOfLinks)
         #resets for each query
@@ -164,7 +176,7 @@ def get_content(url):
             print("ZZzzzz...")
             time.sleep(5)
             print("Was a nice sleep, now let me continue...")
-            continue
+            break;
     raw_html = page.content
     soup = BeautifulSoup(raw_html, 'html.parser')
     results = pullContent(soup)
@@ -268,15 +280,17 @@ def scrape_now():
     post_data = request.get_json()
     queries = post_data.get('queries')    
     lst_queries = queries.split(',') #split by ','
-    current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-    response_object ['results']= scrape(lst_queries, current_timestamp)
-    response_object ['fileName']= current_timestamp
+    # current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
+    response_object ['results']= scrape(lst_queries, "output")
+    response_object ['fileName']= "output"
     return jsonify(response_object)
 
 
-@app.route('/return-file/<filename>')
-def return_file(filename):
-    return send_file('./static/user_pulls/Output_'+filename+'.xlsx', attachment_filename='Output.xlsx', cache_timeout=0)
+@app.route('/return-file', methods=['GET'])
+def return_file():
+    excel_data_df = pd.read_excel('./static/user_pulls/Output_'+"output"+'.xlsx', sheet_name='Results')
+    json_str = excel_data_df.to_json()
+    return json_str
 
 
 
