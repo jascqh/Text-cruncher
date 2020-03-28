@@ -45,15 +45,7 @@ Vue.use(VueRouter);
         requiresAuth: true
       }
     },
-    {
-      path: "/download/:fileName",
-      name: "Download",
-      component: Download,
-      props : true,
-      meta: {
-        requiresAuth: true
-      }
-    },
+   
     {
     path: "/history",
     name: "History",
@@ -62,6 +54,15 @@ Vue.use(VueRouter);
       requiresAuth: true
     }
     },
+
+    {
+      path: "/download",
+      name: "Download",
+      component: Download,
+      meta: {
+        requiresAuth: true
+      }
+    }
   ];
 
 const router = new VueRouter({

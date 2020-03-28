@@ -6,6 +6,7 @@ import re
 import time
 import xlsxwriter
 import myCred
+import openpyxl
 from bs4 import BeautifulSoup
 from gensim.summarization import summarize
 from selenium import webdriver
@@ -40,7 +41,7 @@ chrome_options.add_argument('--no-sandbox')
 # sel_driver = webdriver.Chrome(executable_path=chromedriver_path,chrome_options=chrome_options)
 sel_driver = webdriver.Chrome(executable_path='./static/ChromeDriverWin32/chromedriver.exe',chrome_options=chrome_options) #Local host Test
 
-def scrape(lst_query, fileName):
+def scrape(lst_query):
 
     for query in lst_query:
         """Scrape scheduled link from Selenium"""
@@ -57,13 +58,25 @@ def scrape(lst_query, fileName):
 
         webresults = BeautifulSoup(sel_driver.page_source, "html.parser")
         for info in (webresults.find_all("div", {"class", "g"})):
-            links = info.find("a").get('href')
-            if "http" not in links:
-                continue
-            if links in listOfLinks:
-                continue
-            else:
-                listOfLinks.append(links)
+
+            try:
+                links = info.find("a").get('href')
+                if "http" not in links:
+                    continue
+                if links in listOfLinks:
+                    continue
+                else:
+                    listOfLinks.append(links)
+
+                links = info.find("a").get('href')
+                if "http" not in links:
+                    continue
+                if links in listOfLinks:
+                    continue
+                else:
+                    listOfLinks.append(links)
+            except:
+                break;
         #Serialise Output according to number of links in each query
         final_counter = len(listOfLinks)
         #resets for each query
@@ -91,9 +104,17 @@ def scrape(lst_query, fileName):
         time.sleep(2)  # sleep so that it will simulate actual human activity
         prCyan("Resuming")
 
+    try:
+        wb = openpyxl.load_workbook('./static/user_pulls/output.xlsx')
+        std = wb.get_sheet_by_name('Results')
+        wb.remove_sheet(std)
+        wb.save('./static/user_pulls/output.xlsx')
+    except:
+        pass
+
     # Output to Excel File
     df_results = pd.DataFrame(final_output, columns=final_header)
-    writer = pd.ExcelWriter('./static/user_pulls/Output_'+fileName+'.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter('./static/user_pulls/output.xlsx', engine='xlsxwriter')
     df_results.to_excel(writer, sheet_name='Results', header=final_header, index=False)
 
     # modifyng output by style - wrap
@@ -116,7 +137,7 @@ def scrape(lst_query, fileName):
     writer.save()
     writer.close()
 
-    excel_data_df = pd.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
+    excel_data_df = pd.read_excel('./static/user_pulls/output.xlsx', sheet_name='Results')
     json_str = excel_data_df.to_json()
   
     return json_str
@@ -251,10 +272,9 @@ def send_mail():
     receiver = emailadd.split(',')
     # receiver.append(emailadd.split(','))
     text = post_data.get('MESSAGE')  # receives from html form as String
-    filename = post_data.get('FILE')
-    with app.open_resource('./static/user_pulls/Output_'+filename+'.xlsx') as fp:
+    with app.open_resource('./static/user_pulls/output.xlsx') as fp:
         msg = Message('Below is an Attached File of your Query Results', sender='textcruncher2.0@gmail.com', recipients=receiver)
-        msg.attach('Output_'+filename+'.xlsx', 'file/xlsx', fp.read())
+        msg.attach('output.xlsx', 'file/xlsx', fp.read())
         msg.body = text
         mail.send(msg)
     return jsonify({'status':"DONE"})
@@ -268,15 +288,16 @@ def scrape_now():
     post_data = request.get_json()
     queries = post_data.get('queries')    
     lst_queries = queries.split(',') #split by ','
-    current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-    response_object ['results']= scrape(lst_queries, current_timestamp)
-    response_object ['fileName']= current_timestamp
+    # current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
+    response_object ['results']= scrape(lst_queries)
     return jsonify(response_object)
 
 
-@app.route('/return-file/<filename>')
-def return_file(filename):
-    return send_file('./static/user_pulls/Output_'+filename+'.xlsx', attachment_filename='Output.xlsx', cache_timeout=0)
+@app.route('/return-file', methods=['GET'])
+def return_file():
+    excel_data_df = pd.read_excel('./static/user_pulls/output.xlsx', sheet_name='Results')
+    json_str = excel_data_df.to_json()
+    return json_str
 
 
 

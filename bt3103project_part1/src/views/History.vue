@@ -36,19 +36,18 @@ export default {
   },
   methods:{
     fetchItems:function(){
-      this.email = this.$session.get('email')
-      
+      this.email = this.$session.get('email')      
       let item={}
       //Get all the items from DB
       database.collection('files').get().then((querySnapShot)=>{
         //Loop through each item
         querySnapShot.forEach(doc=>{
-          if (doc.data().Email == this.email) { 
+          if (this.email== doc.data().Email){}
             item=doc.data()
             item.id=doc.id
             this.itemsList.push(item)
             item = {}
-          }
+        }
         })
       })
       
