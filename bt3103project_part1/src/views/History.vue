@@ -42,12 +42,12 @@ export default {
       database.collection('files').get().then((querySnapShot)=>{
         //Loop through each item
         querySnapShot.forEach(doc=>{
-          if (this.email== doc.data().Email){}
+          if (this.email== doc.data().Email){
             item=doc.data()
             item.id=doc.id
             this.itemsList.push(item)
             item = {}
-        }
+          }
         })
       })
       
