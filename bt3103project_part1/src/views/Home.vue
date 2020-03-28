@@ -54,18 +54,31 @@ export default {
       axios.post(path, help)
 
       .then((res) => {
-        console.log(res.data)
-        this.fileName = res.data.fileName;
-        this.item.Email = this.$session.get('email');
-        console.log(this.item.Email)
-        this.item.Date = new Date();
-        this.item.Json = res.data;
-        this.item.Name = this.payload;
-        this.storeItem();
-      })
-      .then(() => {
-        this.$router.push({path : '/download/' + this.fileName});
-      })
+      //   console.log(res.data)
+      //   this.fileName = res.data.fileName;
+      //   this.item.Email = this.$session.get('email');
+      //   console.log(this.item.Email)
+      //   this.item.Date = new Date();
+      //   this.item.Json = res.data;
+      //   this.item.Name = this.payload;
+      //   this.storeItem();
+      // })
+      // .then(() => {
+      //   this.$router.push({path : '/download/' + this.fileName});
+      // })
+          this.msg = res.data.results;
+          this.item.Email = this.$session.get('email');
+          this.item.Date = new Date();
+          this.item.Json = res.data.results;
+          this.item.Name = this.payload;
+          this.storeItem();
+          this.$router.push({path : '/download/' + res.data.fileName});
+        })
+      .catch((error) => {
+          // eslint-disable-next-line
+          this.msg = 'fail'
+          console.error(error);
+        });
     },
 
     load: function() {
