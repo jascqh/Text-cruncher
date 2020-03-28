@@ -4,7 +4,7 @@
     <h1>Search history</h1>
     <div class="bg-secondary text-light">
       <ul>
-        <li v-for="(item , index) in itemsList" v-bind:key="item.id" >
+        <li v-for="(item , index) in itemsList" v-bind:key="item.id">
             {{item.Name}}
             <button name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)">Delete</button>
             <download-csv
@@ -25,20 +25,24 @@ import database from '../firebase.js'
 export default {
   data(){
     return{
-        itemsList: []
+        itemsList: [],
+        email: ""
         }
   },
   methods:{
     fetchItems:function(){
+      this.email = this.$session.get('email')
       let item={}
       //Get all the items from DB
       database.collection('files').get().then((querySnapShot)=>{
         //Loop through each item
         querySnapShot.forEach(doc=>{
+          if (doc.data().Email == this.email) { 
             item=doc.data()
             item.id=doc.id
             this.itemsList.push(item)
             item = {}
+          }
         })
       })
       
