@@ -1,7 +1,7 @@
 <template>
   <div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <v-card>
+    <b-card class="card">
     <h1>Search history</h1>
       <ul>
         <li v-for="(item , index) in itemsList" v-bind:key="item.id" v-on="increaseCount()">
@@ -19,7 +19,7 @@
            
         </li>
     </ul>
-    </v-card>
+    </b-card>
 </div>
 </template>
 
@@ -64,13 +64,12 @@ export default {
     convertData:function(json_str){
       var json = JSON.parse(json_str)
       var datas = []
-      console.log(json)
       for (let i = 0; i < Object.keys(Object.values(json)[0]).length; i++) { 
         var data = {}
         for (var key in json) { 
           data[key] = json[key][i]
         }
-        datas.push(data)
+        
       }
       console.log(datas)
       return datas
@@ -150,6 +149,9 @@ li:nth-of-type(even) {
 
 .download{
   float:right;
+}
+.card{
+  margin:30px
 }
 
 </style>
