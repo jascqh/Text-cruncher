@@ -8,10 +8,7 @@
         <a data-toggle="tooltip" data-placement="left" title="Back to submit more queries!" @click="backHome()">
             <img src="https://visualpharm.com/assets/576/Back%20Arrow-595b40b65ba036ed117d1ee7.svg" alt="Submit" width="38">
         </a>
-        <button type="button" class='btn btn-primary btn-xlg'>
-            <img src="https://img.icons8.com/plasticine/100/000000/download.png" width="38" height="38">
-                Download Now
-        </button>
+        
         <span class="text-muted"> OR </span>
             <!--Triggers Modal-->
             <button type="button" class='btn btn-warning btn-xlg'  v-b-modal.email_popup >
@@ -20,6 +17,10 @@
             </button>
       </div>
       <a>{{fileName}}</a>
+      <download-csv :data= convertData(fileName)>
+            <img src="https://img.icons8.com/plasticine/100/000000/download.png" width="38" height="38">
+              Download Now
+          </download-csv>
   </b-container>
 
    <b-modal
@@ -72,6 +73,21 @@ export default {
     }
   },
   methods: {
+    convertData:function(json_str){
+      var json = JSON.parse(json_str)
+      var datas = []
+      console.log(json)
+      for (let i = 0; i < Object.keys(Object.values(json)[0]).length; i++) { 
+        var data = {}
+        for (var key in json) { 
+          data[key] = json[key][i]
+        }
+        datas.push(data)
+      }
+      console.log(datas)
+      return datas
+
+    },
 
     backHome() {
       this.$router.push({path : '/'});

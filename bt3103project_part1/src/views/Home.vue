@@ -60,7 +60,7 @@ export default {
           this.item.Json = res.data.results;
           this.item.Name = this.payload;
           this.storeItem();
-          this.$router.push({path : '/download/' + res.data.fileName});
+          this.$router.push({path : '/download/' + res.data.results});
         })
       .catch((error) => {
           // eslint-disable-next-line
