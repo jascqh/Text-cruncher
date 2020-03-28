@@ -164,7 +164,7 @@ def get_content(url):
             print("ZZzzzz...")
             time.sleep(5)
             print("Was a nice sleep, now let me continue...")
-            continue
+            break;
     raw_html = page.content
     soup = BeautifulSoup(raw_html, 'html.parser')
     results = pullContent(soup)
