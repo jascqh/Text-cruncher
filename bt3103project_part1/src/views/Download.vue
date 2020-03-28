@@ -5,10 +5,15 @@
       <h3 class="text-muted">Your File is Ready to be Downloaded</h3>
       
       <div class="container-fluid" align="center">
-        <a data-toggle="tooltip" data-placement="left" title="Back to submit more queries!" @click="backHome()">
+        <a href="/" data-toggle="tooltip" data-placement="left" title="Back to submit more queries!">
             <img src="https://visualpharm.com/assets/576/Back%20Arrow-595b40b65ba036ed117d1ee7.svg" alt="Submit" width="38">
         </a>
-        
+            <download-csv
+              :data   = convertData(json) class='btn btn-primary btn-xlg'>
+              Download Data
+              <img src="https://img.icons8.com/plasticine/100/000000/download.png" width="38" height="38">
+            </download-csv>        
+
         <span class="text-muted"> OR </span>
             <!--Triggers Modal-->
             <button type="button" class='btn btn-warning btn-xlg'  v-b-modal.email_popup >
@@ -16,11 +21,7 @@
                     Send to Mail
             </button>
       </div>
-      <a>{{fileName}}</a>
-      <download-csv :data= convertData(fileName)>
-            <img src="https://img.icons8.com/plasticine/100/000000/download.png" width="38" height="38">
-              Download Now
-          </download-csv>
+
   </b-container>
 
    <b-modal
@@ -63,34 +64,44 @@
 import axios from 'axios';
 import swal from 'sweetalert';
 
+
 export default {
 
   data() {
     return {
-      fileName:'',
       email: '',
-      message:''
+      message:'',
+      json:'',
     }
   },
   methods: {
-    convertData:function(json_str){
-      var json = JSON.parse(json_str)
+ 
+    convertData: function(json){
       var datas = []
-      console.log(json)
-      for (let i = 0; i < Object.keys(Object.values(json)[0]).length; i++) { 
-        var data = {}
-        for (var key in json) { 
-          data[key] = json[key][i]
-        }
-        datas.push(data)
+      // console.log(Object.keys(json[Object.keys(json)[0]]).length)
+      try {
+          var count = Object.keys(json[Object.keys(json)[0]]).length
+          for (let i = 0; i < count; i++) { 
+            var data = {}
+            for (var key in json) { 
+              data[key] = json[key][i]
+            }
+            datas.push(data)
+          }
+          // console.log(datas)
+          return datas
+               
+      } catch (error) {
+           return datas // return the data before any null pointers
       }
-      console.log(datas)
-      return datas
+  }, 
 
-    },
-
-    backHome() {
-      this.$router.push({path : '/'});
+    retriveFile: function() {
+      const path = 'http://localhost:5000/return-file'
+      axios.get(path)
+      .then((res) =>{
+        this.json = res.data
+      })
     },
 
     resetModal() {
@@ -109,27 +120,29 @@ export default {
       })
       
       const payload = {EMAIL: this.email,
-                      MESSAGE: this.message,
-                      FILE: this.fileName}
-      const path = 'http://localhost:5000/send-mail';
-      axios.post(path, payload)
-      .then(() =>{
-          swal({
-          title: "Email Sent",
-          text: "Please check your inbox",
-          icon: "success",
-          button: "I understand"
-        });
-      })
+                      MESSAGE: this.message}
+      if(this.email == '') {
+        return
+      }
+      else {
+        const path = 'http://localhost:5000/send-mail';
+        axios.post(path, payload)
+        .then(() =>{
+            swal({
+            title: "Email Sent",
+            text: "Please check your inbox",
+            icon: "success",
+            button: "I understand"
+          });
+        })
+        }
     },
 
-     fetchPost() {
-       this.fileName = this.$route.params.fileName;
-      },
   },
+  //Lifecycle hook
+  created(){
+      this.retriveFile()
+    }
 
-  mounted() {
-    this.fetchPost();
-  }
 }
 </script>
