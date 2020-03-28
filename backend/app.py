@@ -115,7 +115,6 @@ def scrape(lst_query, fileName):
     df_results = None
     writer.save()
     writer.close()
-    sel_driver.quit() #closes all instances of sel_driver
 
     excel_data_df = pd.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
     json_str = excel_data_df.to_json()
@@ -208,12 +207,6 @@ def get_content(url):
 
     return final_text_summary
 
-def restart_program():
-    """Restarts the current program.
-    Note: this function does not return. Any cleanup action (like
-    saving data) must be done before calling this function."""
-    python = sys.executable
-    os.execl(python, python, * sys.argv)
 
 """-------------------------------FLASK APPLICATION------------------------------------""" 
 ##localhost5000
