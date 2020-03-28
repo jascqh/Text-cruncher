@@ -8,16 +8,11 @@
         <a href="/" data-toggle="tooltip" data-placement="left" title="Back to submit more queries!">
             <img src="https://visualpharm.com/assets/576/Back%20Arrow-595b40b65ba036ed117d1ee7.svg" alt="Submit" width="38">
         </a>
-        <!-- <button type="button" class='btn btn-primary btn-xlg'>
-            <img src="https://img.icons8.com/plasticine/100/000000/download.png" width="38" height="38">
-                Download Now
-        </button> -->
-
-            <!-- <download-csv
-              :data   = convertData(json)>
+            <download-csv
+              :data   = convertData(json) class='btn btn-primary btn-xlg'>
               Download Data
-              <img src="https://img.icons8.com/plasticine/100/000000/download.png">
-            </download-csv>         -->
+              <img src="https://img.icons8.com/plasticine/100/000000/download.png" width="38" height="38">
+            </download-csv>        
 
         <span class="text-muted"> OR </span>
             <!--Triggers Modal-->
@@ -26,7 +21,7 @@
                     Send to Mail
             </button>
       </div>
-      <a>{{json}}</a>
+
   </b-container>
 
    <b-modal
@@ -81,20 +76,25 @@ export default {
   },
   methods: {
  
-    convertData: function(json_str){
-      var json = JSON.parse(json_str)
+    convertData: function(json){
       var datas = []
-      console.log(json)
-      for (let i = 0; i < Object.keys(Object.values(json)[0]).length; i++) { 
-        var data = {}
-        for (var key in json) { 
-          data[key] = json[key][i]
-        }
-        datas.push(data)
+      // console.log(Object.keys(json[Object.keys(json)[0]]).length)
+      try {
+          var count = Object.keys(json[Object.keys(json)[0]]).length
+          for (let i = 0; i < count; i++) { 
+            var data = {}
+            for (var key in json) { 
+              data[key] = json[key][i]
+            }
+            datas.push(data)
+          }
+          // console.log(datas)
+          return datas
+               
+      } catch (error) {
+           return datas // return the data before any null pointers
       }
-      console.log(datas)
-      return datas
-    },
+  }, 
 
     retriveFile: function() {
       const path = 'http://localhost:5000/return-file'
@@ -120,18 +120,22 @@ export default {
       })
       
       const payload = {EMAIL: this.email,
-                      MESSAGE: this.message,
-                      FILE: "output"}
-      const path = 'http://localhost:5000/send-mail';
-      axios.post(path, payload)
-      .then(() =>{
-          swal({
-          title: "Email Sent",
-          text: "Please check your inbox",
-          icon: "success",
-          button: "I understand"
-        });
-      })
+                      MESSAGE: this.message}
+      if(this.email == '') {
+        return
+      }
+      else {
+        const path = 'http://localhost:5000/send-mail';
+        axios.post(path, payload)
+        .then(() =>{
+            swal({
+            title: "Email Sent",
+            text: "Please check your inbox",
+            icon: "success",
+            button: "I understand"
+          });
+        })
+        }
     },
 
   },
