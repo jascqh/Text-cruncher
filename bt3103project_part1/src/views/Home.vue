@@ -48,19 +48,15 @@ export default {
       axios.post(path, help)
 
       .then((res) => {
-        this.fileName = res.data.fileName;
-      })
-      .then(() => {
-        this.$router.push({path : '/download/' + this.fileName});
-      })
-          this.msg = res.data;
+          this.msg = res.data.results;
           this.item.Email = this.$session.get('email');
           this.item.Date = new Date();
-          this.item.Json = res.data;
+          this.item.Json = res.data.results;
           this.item.Name = this.payload;
           this.storeItem();
+          this.$router.push({path : '/download/' + res.data.fileName});
         })
-        .catch((error) => {
+      .catch((error) => {
           // eslint-disable-next-line
           this.msg = 'fail'
           console.error(error);

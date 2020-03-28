@@ -276,7 +276,8 @@ def scrape_now():
     queries = post_data.get('queries')    
     lst_queries = queries.split(',') #split by ','
     current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-    response_object ['fileName']= scrape(lst_queries, current_timestamp)
+    response_object ['results']= scrape(lst_queries, current_timestamp)
+    response_object ['fileName']= current_timestamp
     return jsonify(response_object)
 
 
