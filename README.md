@@ -11,6 +11,10 @@ BT3103 project
 ## Application summary
 Our application is a TextSummarizer and Web scraping  for research webpage called TextCrucher. It accesses the content from Google search results and helps the user scrape all the data to produce a compiled excel sheet of the relevant summarized information that will be sent to the user’s email or via instant download through our website.
 
+
+## How to use it (with account)
+Users can either log in via their google account or sign up using their email for a account. The search process would be as per using it without account. The main difference is that user's previous searches would be store in a history that can be easily referenced. This facilitates and allow user to track their previous records.
+
 ## Installation
 clone the project from github 
 ```
