@@ -61,7 +61,7 @@ export default {
       console.log("Item Deleted Successfully")
 
     },
-    convertData:function(json_str){
+      convertData:function(json_str){
       var json = JSON.parse(json_str)
       var datas = []
       for (let i = 0; i < Object.keys(Object.values(json)[0]).length; i++) { 
