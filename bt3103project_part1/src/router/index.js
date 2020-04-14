@@ -71,6 +71,7 @@ const router = new VueRouter({
   routes
 })
 // Nav Guard
+router.onReady(()=> { 
 router.beforeEach((to, from, next) => {
   // Check for requiresAuth guard
   if (to.matched.some(record => record.meta.fullAccess)){
@@ -110,6 +111,7 @@ router.beforeEach((to, from, next) => {
     // Proceed to route
     next();
   }
-});
+})
+})
 
 export default router;

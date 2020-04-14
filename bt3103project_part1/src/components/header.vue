@@ -12,8 +12,8 @@
                <!-- cannot get this to appear :c because navbar not being refreshed -->
                 <b-nav-item to="/" >Home</b-nav-item>
                 <b-nav-item to="/about">About</b-nav-item>
-                <b-nav-item to="/login">Login</b-nav-item>
-                <b-nav-item to="/register">Register</b-nav-item>
+                <!--<b-nav-item to="/login">Login</b-nav-item>
+                <b-nav-item to="/register">Register</b-nav-item> -->
                 <b-nav-item to="/history">History</b-nav-item>
                 <b-nav-item to="/download">Download</b-nav-item>
                 <li><button v-on:click="logout" class="btn btn-outline-light btn-sm">Logout</button></li>
@@ -47,7 +47,8 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.$router.go({ path: this.$router.path });
+          this.$router.replace({ path: '/login'});
+          this.$router.go({ path: '/login'});
         });
     }
   }

@@ -82,7 +82,8 @@ export default {
             var user = data.user;
             alert(`You are logged in as ${user.email}`);
             this.$session.set('email', user.email);
-            this.$router.push({ path: '/' });
+            this.$router.replace({ path: '/' });
+            this.$router.go({ path: '/' });
           },
           err => {
             alert(err.message);
