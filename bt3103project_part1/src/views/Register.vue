@@ -20,15 +20,24 @@
 
 <script>
 import firebase from 'firebase';
+import database from '../firebase.js'
 export default {
   name: 'register',
-  data: function() {
+  data() {
     return {
+      item : {
       email: '',
-      password: ''
+      password: '',
+      date:'',
+      }
     };
   },
   methods: {
+    storeItem: function() { 
+      //save to database
+      database.collection('users').doc().set(this.item)
+      alert("I am in the DB :D")
+    },
     register: function(e) {
       firebase
         .auth()
@@ -36,6 +45,10 @@ export default {
         .then(
          data => {
             var user = data.user;
+            this.item.email = this.email;
+            this.item.password = this.password;
+            this.item.date = new Date();
+            this.storeItem();
             alert(`Account Created for ${user.email}`);
             this.$router.replace({ name: "Home" });; 
           },
