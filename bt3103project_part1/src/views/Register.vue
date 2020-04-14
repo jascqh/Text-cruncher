@@ -27,8 +27,8 @@ export default {
     return {
       item : {
       email: '',
-      password: '',
-      date:'',
+      //password: '',
+      datecreated:'',
       }
     };
   },
@@ -46,8 +46,8 @@ export default {
          data => {
             var user = data.user;
             this.item.email = this.email;
-            this.item.password = this.password;
-            this.item.date = new Date();
+            //this.item.password = this.password;
+            this.item.datecreated = new Date();
             this.storeItem();
             alert(`Account Created for ${user.email}`);
             this.$router.replace({ name: "Home" });; 
