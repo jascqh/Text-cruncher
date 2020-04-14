@@ -5,6 +5,8 @@ import os
 import re
 import time
 import xlsxwriter
+import myCred
+import openpyxl
 from bs4 import BeautifulSoup
 from gensim.summarization import summarize
 from selenium import webdriver
@@ -16,7 +18,6 @@ from flask_cors import CORS
 
 
 """ --------------------Main Script-------------------------- """
-#Readability
 def prGreen(skk): print("\033[92m {}\033[00m" .format(skk))
 def prCyan(skk): print("\033[96m {}\033[00m" .format(skk))
 
@@ -40,7 +41,7 @@ chrome_options.add_argument('--no-sandbox')
 # sel_driver = webdriver.Chrome(executable_path=chromedriver_path,chrome_options=chrome_options)
 sel_driver = webdriver.Chrome(executable_path='./static/ChromeDriverWin32/chromedriver.exe',chrome_options=chrome_options) #Local host Test
 
-def scrape(lst_query, fileName):
+def scrape(lst_query):
 
     for query in lst_query:
         """Scrape scheduled link from Selenium"""
@@ -57,13 +58,25 @@ def scrape(lst_query, fileName):
 
         webresults = BeautifulSoup(sel_driver.page_source, "html.parser")
         for info in (webresults.find_all("div", {"class", "g"})):
-            links = info.find("a").get('href')
-            if "https" not in links:
-                continue
-            if links in listOfLinks:
-                continue
-            else:
-                listOfLinks.append(links)
+
+            try:
+                links = info.find("a").get('href')
+                if "http" not in links:
+                    continue
+                if links in listOfLinks:
+                    continue
+                else:
+                    listOfLinks.append(links)
+
+                links = info.find("a").get('href')
+                if "http" not in links:
+                    continue
+                if links in listOfLinks:
+                    continue
+                else:
+                    listOfLinks.append(links)
+            except:
+                break;
         #Serialise Output according to number of links in each query
         final_counter = len(listOfLinks)
         #resets for each query
@@ -91,9 +104,17 @@ def scrape(lst_query, fileName):
         time.sleep(2)  # sleep so that it will simulate actual human activity
         prCyan("Resuming")
 
+    try:
+        wb = openpyxl.load_workbook('./static/user_pulls/output.xlsx')
+        std = wb.get_sheet_by_name('Results')
+        wb.remove_sheet(std)
+        wb.save('./static/user_pulls/output.xlsx')
+    except:
+        pass
+
     # Output to Excel File
     df_results = pd.DataFrame(final_output, columns=final_header)
-    writer = pd.ExcelWriter('./static/user_pulls/Output_'+fileName+'.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter('./static/user_pulls/output.xlsx', engine='xlsxwriter')
     df_results.to_excel(writer, sheet_name='Results', header=final_header, index=False)
 
     # modifyng output by style - wrap
@@ -115,14 +136,14 @@ def scrape(lst_query, fileName):
     df_results = None
     writer.save()
     writer.close()
-    sel_driver.quit() #closes all instances of sel_driver
 
-    excel_data_df = pandas.read_excel('./static/user_pulls/Output_'+fileName+'.xlsx', sheet_name='Results')
+    excel_data_df = pd.read_excel('./static/user_pulls/output.xlsx', sheet_name='Results')
     json_str = excel_data_df.to_json()
+  
     return json_str
 
 def pullContent(soup):
-    print("Pulling")
+    # print("Pulling")
     results = ""
     links = soup.select("p")
     if (len(links) == 0):
@@ -148,10 +169,10 @@ def pullContent(soup):
 
 # Main content Generator with BS4 and Selenium if BS4 fails to scrape
 def get_content(url):
-    prCyan('BS4 Pull Request...')
+    # prCyan('BS4 Pull Request...')
     headers = requests.utils.default_headers()
     headers.update({
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
     })
     page = ''
     while page == '':
@@ -164,12 +185,12 @@ def get_content(url):
             print("ZZzzzz...")
             time.sleep(5)
             print("Was a nice sleep, now let me continue...")
-            continue
+            break;
     raw_html = page.content
     soup = BeautifulSoup(raw_html, 'html.parser')
     results = pullContent(soup)
-    prGreen('BS4 Original Content:')
-    print(results)
+    # prGreen('BS4 Original Content:')
+    # print(results)
     headers = soup.select("h1")
     header = ""
     if len(headers) != 0:
@@ -182,7 +203,7 @@ def get_content(url):
 
     # Check if content can be pulled with BS4
     """word count minimum"""
-    validThreshold = 300
+    validThreshold = 400
     if len(results.split(" ")) < validThreshold:
         # Selenium Pull
         sel_driver.implicitly_wait(1)  # reduce error
@@ -190,18 +211,18 @@ def get_content(url):
         soup = BeautifulSoup(sel_driver.page_source, "html.parser")
         results = pullContent(soup)
         prCyan('Selenium Original Content:')
-        print(results)
+        # print(results)
 
     """Output with summariser"""
     # apply final regex clean up before summarising
     results = re.sub(r"\{(.*?)\}+", '', results) #removes anything enclosing {}
     results = re.sub(r"(#[A-Za-z]+)",'', results) #removes hashtags
     results = re.sub(r"(^.+@[^\.].*\.[a-z]{2,}$)",'', results)  #removes email
-    prCyan('After Regex...')
-    print(results)
+    # prCyan('After Regex...')
+    # print(results)
     final_results = summarize(results)
-    prCyan('With text summary:')
-    print(final_results)
+    # prCyan('With text summary:')
+    # print(final_results)
     final_text_summary.append(header)
     final_text_summary.append(final_results)
 
@@ -211,6 +232,10 @@ def get_content(url):
 """-------------------------------FLASK APPLICATION------------------------------------""" 
 ##localhost5000
 # configuration
+
+myCred.setVar()
+email_pw = os.environ.get('EMAIL_PW') #fetch from environment credentials
+
 DEBUG = True
 
 # instantiate the app
@@ -220,8 +245,6 @@ app.config.from_object(__name__)
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-email_pw = os.environ.get('EMAIL_PW') #fetch from environment credentials
-
 """Flask Mail Configuration"""
 app.config['TESTING'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -229,7 +252,7 @@ app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_DEBUG'] = False #same as Debug mode
-app.config['MAIL_USERNAME'] = 'textcruncher@gmail.com'
+app.config['MAIL_USERNAME'] = 'textcruncher2.0@gmail.com'
 app.config['MAIL_PASSWORD'] = email_pw
 app.config['MAIL_DEFAULT_SENDER'] = None
 app.config['MAIL_MAX_EMAILS'] = None
@@ -242,49 +265,41 @@ mail= Mail(app)
 
 # Routing
 
-@app.route('/send-mail/', methods=['POST'])
+@app.route('/send-mail', methods=['POST'])
 def send_mail():
-    receiver = []
-    emailadd = request.form['email_address']
+    post_data = request.get_json()
+    emailadd = post_data.get('EMAIL')
     receiver = emailadd.split(',')
     # receiver.append(emailadd.split(','))
-    text = request.form['msg_txt']  # receives from html form as String
-    filename = request.form['fileName']
-    with app.open_resource('./static/user_pulls/Output_'+filename+'.xlsx') as fp:
-        msg = Message('Below is an Attached File of your Query Results', sender='textcruncher@gmail.com', recipients=receiver)
-        msg.attach('Output_'+filename+'.xlsx', 'file/xlsx', fp.read())
+    text = post_data.get('MESSAGE')  # receives from html form as String
+    with app.open_resource('./static/user_pulls/output.xlsx') as fp:
+        msg = Message('Below is an Attached File of your Query Results', sender='textcruncher2.0@gmail.com', recipients=receiver)
+        msg.attach('output.xlsx', 'file/xlsx', fp.read())
         msg.body = text
         mail.send(msg)
-    # return render_template('downloads.html', filename=filename)
+    return jsonify({'status':"DONE"})
 
-# @app.route('/')
-# def home():
-#     # return render_template('index.html')
-
-@app.route('/scrape', methods=['GET', 'POST'])
+@app.route('/scrape', methods=['POST'])
 def scrape_now():
     #OBtains data from html form and pass it through python to another html page
     # queries = request.form['queries'] #receives from html form as String
     # return render_template('downloads.html', filename=current_timestamp)
-
-    result = {'status': 'success'}
-    if request.method == 'POST':
-        post_data = request.get_json()
-        queries = post_data.get('queries')    
-        lst_queries = queries.split(',') #split by ','
-        current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-        result = scrape(lst_queries, current_timestamp)
-
-    else:
-        result['books'] = 'fail again'
-    return jsonify(result)
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+    queries = post_data.get('queries')    
+    lst_queries = queries.split(',') #split by ','
+    # current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
+    response_object ['results']= scrape(lst_queries)
+    return jsonify(response_object)
 
 
-@app.route('/return-file/<filename>')
-def return_file(filename):
-    return send_file('./static/user_pulls/Output_'+filename+'.xlsx', attachment_filename='Output.xlsx', cache_timeout=0)
+@app.route('/return-file', methods=['GET'])
+def return_file():
+    excel_data_df = pd.read_excel('./static/user_pulls/output.xlsx', sheet_name='Results')
+    json_str = excel_data_df.to_json()
+    return json_str
 
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True)
