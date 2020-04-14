@@ -6,12 +6,13 @@ import About from"../views/About.vue";
 import Login from "../views/Login.vue";
 import History from "../views/History.vue";
 import Register from "../views/Register.vue";
+import Download from "../views/Download.vue";
 
 
 Vue.use(VueRouter);
 
-let router = new VueRouter({
-  routes: [
+
+ const routes = [
     {
       path: '/',
       name: 'Home',
@@ -38,15 +39,13 @@ let router = new VueRouter({
     },
     {
       path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: About,
-    meta: {
-      fullAccess: true
-    }
+      name: "About",
+      component: About,
+      meta: {
+        requiresAuth: true
+      }
     },
+   
     {
     path: "/history",
     name: "History",
@@ -56,15 +55,21 @@ let router = new VueRouter({
     }
     },
 
-    // {
-    //   path: "/download/:fileName",
-    //   name: "Download",
-    //   component: Download,
-    //   props:true
-    // }
-  ]
-});
+    {
+      path: "/download",
+      name: "Download",
+      component: Download,
+      meta: {
+        requiresAuth: true
+      }
+    }
+  ];
 
+const router = new VueRouter({
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes
+})
 // Nav Guard
 router.beforeEach((to, from, next) => {
   // Check for requiresAuth guard
