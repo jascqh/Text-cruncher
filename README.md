@@ -21,8 +21,9 @@ Text Cruncher will then search the web for the sites/articles that are closely r
 
 ## Installation
 clone the project from github 
+Run the front end named ```bt3103project_part1``` using the commands below
 ```
-cd "file location" from command prompt / terminal 
+cd "replace this with the file location"
 npm install 
 npm run serve
 ```
