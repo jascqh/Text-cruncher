@@ -2,7 +2,7 @@
     <div>
         <b-navbar toggleable="lg" type="dark bg-dark static-top" variant="info" >
             <b-navbar-brand>
-                <img src="../assets/TextCruncherLogo.jpg" height ="30" width ="30">
+                <img src="..\assets\TextCruncher.png" height="30" width="30">
             </b-navbar-brand>
             <b-navbar-brand a>TextCruncher</b-navbar-brand>
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -20,8 +20,7 @@
             </b-navbar-nav>
             </b-collapse>
         </b-navbar>
-    </div>
-
+      </div>
 </template>
 
 <script>
@@ -57,12 +56,18 @@ export default {
 
 <style lang="scss" scoped>
 #nav a.router-link-exact-active {
-    color: white;
+    color: #4682B4;
 }
 #nav a{
-    font-weight: bold;
+    font-weight:100;
     color:gray;
-
 }
 
+.navbar-default {
+  background: rgba(0,0,0,0.5);
+  font-size: 100px;
+}
+.input{
+   text-align:center;
+}
 </style>

@@ -18,6 +18,49 @@
       </div>
 </template>
 
+
+
+<style scoped>
+.card{
+  margin: 0px auto;
+  float:none;
+  margin-bottom:10px ;
+}
+
+::placeholder{
+  color:darkgrey;
+  opacity: 1;
+  font-size: 12px;
+}
+
+.form-box{
+  width:100%;
+  height: 40px;
+  padding-left: 15px;
+  border: none;
+  border-radius:20px;
+  margin-bottom: 20px;
+  background: #eeeeee;
+}
+
+
+.btn-signin {
+  float: left;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  text-align: center;
+  color: #ffffff;
+  padding-top: 8px;
+  width: 40%;
+  height: 35px;
+    border: none;
+    border-radius: 18px;
+  margin-top: 20px;
+  background-color: #4682B4;
+}
+</style>
+
 <script>
 import firebase from 'firebase';
 
@@ -52,3 +95,4 @@ export default {
   }
 };
 </script>
+

@@ -1,25 +1,55 @@
 <template>
 <div class='container'>
   <b-container align="center">
-      <slideShow align="center"></slideShow>
-     <p>Please input at least one query up to 5 at once.</p>
+      <img src="..\assets\TextCruncher.png" style="width:300px;height:300px;">
     <b-row align-v = "center">
-      <b-form-textarea v-model="payload"
-      :placeholder="'Enter your queries here \nEg. Query 1, Query 2, Query 3 ... Up to 5 Queries'"
-      :rows="2"
-      :max-rows="5"></b-form-textarea>
-    </b-row>
-      <div class="mt-2" align="center">Please separate your queries with a comma ',' in between</div>
-      <button type="button" id="btnFetch" class="btn btn-primary mb-2" @click="validator()">Scrape!
+      <b-form-textarea class="form-control" style="overflow:auto" v-model="payload"
+      :placeholder="'TextCruncher allows you to enter up to 5 queries here! Separate each of them with a comma. '"
+      :rows="1"
+      :max-rows="5">
+      </b-form-textarea>
+      </b-row>
+
+      <button type="button" id="btnFetch" class="btn" @click="validator()">&nbsp;Scrape!&nbsp;
         <i v-if = "loadingButton" class = "spinner-border spinner-border-sm"></i>
       </button>
   </b-container>
-</div>
   
+</div>
+
 </template>
 
+<style scoped>
+
+::placeholder{
+  color:lightgray;
+  font-size: 14px;
+  align-content: center;
+}
+
+img {
+  border-radius: 50%;
+  margin-bottom: 1cm;
+  border: 0;
+}
+
+#btnFetch{
+  background-color:#3F729B;
+  color: #ffffff;
+  border-radius: 20px;
+  margin-top: 1cm;
+}
+textarea{
+   text-align:center;
+   border-radius: 18px;
+   line-height:55px;
+   max-height: 70px;
+   box-shadow: 2px 2px 3px #999;
+}
+
+</style>
+
 <script>
-import SlideShow from "../components/slideShow.vue"
 import swal from 'sweetalert';
 import axios from 'axios';
 //import LoginVue from './Login.vue'
@@ -39,7 +69,6 @@ export default {
       }
     }
   },
-
   methods: {
 
     storeItem: function() { 
@@ -63,12 +92,10 @@ export default {
           this.$router.push({path : '/download'});
         })
     },
-
     load: function() {
       this.loadingButton = !this.loadingButton;
       this.scrape(); //Submits form
     },
-
     validator: function() {
       var queries = this.payload;
       var commas_query = queries.match(/,/g);
@@ -103,10 +130,5 @@ export default {
       }
     }
   },
-
-
-  components:{
-    "slideShow": SlideShow
-  }
 }
 </script>
