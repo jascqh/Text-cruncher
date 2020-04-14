@@ -55,9 +55,3 @@ use: .\venv\Scripts\activate to activate enviroment, will be on localhost5000
 - Firestore / firebase
 - Bootstrap
 - Flask
-
-Left to do:
-1. Scrape Results to firebase
-2. rendering download page
-3. retriving file from firebase 
-4. Using Firebase to email (alternative use flask_mail which is already implemented)
