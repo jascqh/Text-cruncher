@@ -15,7 +15,9 @@
     <div id = "chart2">
       <runtime></runtime>
     </div>
-    <VueFaqAccordion class = "FAQ" :items="myItems"/>
+    <div id = "insights">
+      <VueFaqAccordion class = "FAQ" :items="myItems"/>
+    </div>
   </div>
 </template>
 
@@ -103,11 +105,15 @@ export default {
 }
 .FAQ{
   right: 150px;
+  //padding: 700px;
 }
 /* Clear floats after the columns */
 .row:after {
   content: "";
   display: table;
   clear: both;
+}
+#insights {
+  padding: 850px 30px;
 }
 </style>
