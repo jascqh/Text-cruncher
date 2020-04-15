@@ -15,18 +15,18 @@ Vue.use(VueRouter);
  const routes = [
     {
       path: '/',
-      name: 'Home',
-      component: Home,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/login',
-      name: 'login',
+      name: 'Login',
       component: Login,
       meta: {
         requiresAuth: false
+      }
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: Home,
+      meta: {
+        requiresAuth: true
       }
     },
     {
@@ -41,9 +41,9 @@ Vue.use(VueRouter);
       path: "/about",
       name: "About",
       component: About,
-      meta: {
-        requiresAuth: true
-      }
+      // meta: {
+      //   requiresAuth: false
+      // }
     },
    
     {
@@ -82,7 +82,7 @@ router.beforeEach((to, from, next) => {
     if (firebase.auth().currentUser) {
       // Go to login
       next({
-        path: '/',
+        path: '/home',
         query: {
           redirect: to.fullPath
         }
@@ -97,7 +97,7 @@ router.beforeEach((to, from, next) => {
     if (!firebase.auth().currentUser) {
       // Go to login
       next({
-        path: '/login',
+        path: '/',
         query: {
           redirect: to.fullPath
         }

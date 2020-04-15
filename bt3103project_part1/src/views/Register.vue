@@ -8,20 +8,27 @@
         <div class="column"><img src="../assets/slide4.png"></div>
       </div>
     </div>
-    <h3 class = "sign">Sign Up Here!</h3>
-    <form action="index.html">
-      <div class="input-field">
-        <i class="material-icons prefix">email</i>
-        <input type="email" id="email" v-model="email">
-      </div>
-      <div class="input-field">
-        <i class="material-icons prefix">lock</i>
-        <input type="password" id="password" v-model="password">
-      </div>
-      <button v-on:click="register" class="btn btn-large btn-extended grey lighten-4 black-text">Register</button>
-    </form>
+     <b-card title="Register"
+  style="max-width: 30rem;"
+  class="mb2">
+    <span style="display:inline-block; width: YOURWIDTH;"></span>
+    <b-card-text>
+      <form action="index.html">
+        <div class="input">
+          <input class= "form-box" type="email" v-model="email" placeholder="Email Address">
+        </div>
+        <div>
+          <input class= "form-box" type="password" v-model="password" placeholder="Password" >
+        </div>
 
-  </div>
+        <div>
+         <a class="btn-signin" v-on:click="register">Sign Up</a>
+        </div>
+      </form>
+    </b-card-text>
+  </b-card>
+  <p> Click <router-link to= "/">here </router-link> to go back to login page.</p>
+</div>
 </template>
 
 <style scoped>
@@ -30,25 +37,19 @@
   float:none;
   margin-bottom:10px ;
 }
-
 ::placeholder{
   color:darkgrey;
   opacity: 1;
   font-size: 12px;
 }
-
 .form-box{
   width:100%;
   height: 40px;
-  padding-left: 15px;
   border: none;
   border-radius:20px;
   margin-bottom: 20px;
   background: #eeeeee;
-
 }
-
-
 .btn-signin {
   float: left;;
   font-weight: 700;
@@ -70,14 +71,18 @@
   padding-top: 0cm;
   padding-bottom: 1cm;  
 }
-
-.column {
-  width: 33.33%;
+/* Clear floats after the columns */
+.row {
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  float:none;
+  padding-bottom: 2cm;
 }
 
-.sign{
-  padding-top: 2cm;
-  font-family: Impact, Charcoal, sans-serif;
+.column {
+  float: left;
+  width: 33.33%;
 }
 </style>
 
