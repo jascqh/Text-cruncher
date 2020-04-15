@@ -2,6 +2,7 @@
 node_modules
 /dist
 venv
+user_pulls
 
 # local env files
 .env.local
