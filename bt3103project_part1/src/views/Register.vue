@@ -75,7 +75,6 @@
 .row {
   margin-left: auto;
   margin-right: auto;
-  width: 30%;
   float:none;
   padding-bottom: 2cm;
 }
