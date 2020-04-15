@@ -67,6 +67,7 @@
 
 <script>
 import firebase from 'firebase';
+
 export default {
   name: 'login',
   data: function() {
@@ -82,6 +83,7 @@ export default {
         .signInWithEmailAndPassword(this.email, this.password)
         .then(
           user => {
+            user.email = this.email
             alert(`You are logged in as ${user.email}`);
             this.$router.push('/');
           },
@@ -89,8 +91,10 @@ export default {
             alert(err.message);
           }
         );
+      
       e.preventDefault();
     }
+    
   }
 };
 </script>
