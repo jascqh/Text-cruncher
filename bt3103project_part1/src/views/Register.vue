@@ -1,14 +1,6 @@
 <template>
-  <div>
-    <div class="col s12 m8 offset-m2">
-      <h1 class="function">Stuff you can do with an Account!</h1>
-      <div class="row">
-        <div class="column"><img src="../assets/slide2.png"></div>
-        <div class="column"><img src="../assets/slide3.png"></div>
-        <div class="column"><img src="../assets/slide4.png"></div>
-      </div>
-    </div>
-      <b-card title="Register"
+  <div> 
+  <b-card title="Register"
   style="max-width: 30rem;"
   class="mb2">
     <span style="display:inline-block; width: YOURWIDTH;"></span>
@@ -36,11 +28,13 @@
   float:none;
   margin-bottom:10px ;
 }
+
 ::placeholder{
   color:darkgrey;
   opacity: 1;
   font-size: 12px;
 }
+
 .form-box{
   width:100%;
   height: 40px;
@@ -49,7 +43,10 @@
   border-radius:20px;
   margin-bottom: 20px;
   background: #eeeeee;
+
 }
+
+
 .btn-signin {
   float: left;;
   font-weight: 700;

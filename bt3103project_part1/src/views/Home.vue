@@ -1,7 +1,7 @@
 <template>
 <div class='container'>
   <b-container align="center">
-      <img src="..\assets\TextCruncher.png" style="width:300px;height:300px;">
+    <img src="..\assets\TextCruncher.png" style="width:300px;height:300px;">
     <b-row align-v = "center">
       <b-form-textarea class="form-control" style="overflow:auto" v-model="payload"
       :placeholder="'TextCruncher allows you to enter up to 5 queries here! Separate each of them with a comma. '"
@@ -13,8 +13,9 @@
       <button type="button" id="btnFetch" class="btn" @click="validator()">&nbsp;Scrape!&nbsp;
         <i v-if = "loadingButton" class = "spinner-border spinner-border-sm"></i>
       </button>
+{{msg}}
+    
   </b-container>
-  
 </div>
 
 </template>
@@ -52,45 +53,27 @@ textarea{
 <script>
 import swal from 'sweetalert';
 import axios from 'axios';
-//import LoginVue from './Login.vue'
-import database from '../firebase.js'
-
 export default {
   data() {
     return {
-      fileName:'',
       payload: '',
       loadingButton: false,
-      item: {
-        Date:"",
-        Json:"",
-        Name:"",
-        Email:""
-      }
+      msg:''
     }
   },
   methods: {
-
-    storeItem: function() { 
-      //save to database
-      database.collection('files').doc().set(this.item)
-      alert("I am in the DB :D")
-    },
-
     scrape: function() {
       const path = 'http://localhost:5000/scrape';
       const help = {queries: this.payload}
       axios.post(path, help)
-
       .then((res) => {
-          this.msg = res.data.results;
-          this.item.Email = this.$session.get('email');
-          this.item.Date = new Date();
-          this.item.Json = res.data.results;
-          this.item.Name = this.payload;
-          this.storeItem();
-          this.$router.push({path : '/download'});
+          this.msg = res.data;
         })
+        .catch((error) => {
+          // eslint-disable-next-line
+          this.msg = 'fail'
+          console.error(error);
+        });
     },
     load: function() {
       this.loadingButton = !this.loadingButton;
