@@ -1,70 +1,36 @@
-
 <template>
   <div class="about">
-
-    <h3 class = "dash">Some Insights...</h3> 
-  
+    <h3 class = "dash">Some Insights...</h3>  
+    
     <div id = "chart">
       <barchart></barchart>
     </div>
     <div id = "chart">
-      <linechart></linechart>
-    </div>
-    <div id = "chart">
       <doughnut></doughnut>
     </div>
+
+    <div id = "chart2">
+      <linechart></linechart>
+    </div>
+    <div id = "chart2">
+      <runtime></runtime>
+    </div>
+    <div id = "insights">
       <VueFaqAccordion class = "FAQ" :items="myItems"/>
+    </div>
   </div>
 </template>
 
-<style scoped>
-#main{
-    content:"";
-    display:table;
-    clear:both;
-}
-#chart{
-  height:20%;
-  width:30%;
-  border-style: solid;
-  border-color:rgb(155, 84, 84);
-  border-width: 1px;
-  
-  display: inline-block;
-  right: 150px;
-}
-
-.dash{
-  padding-top: 1cm;
-  font-family: "Lucida Console", Courier, monospace;
-}
-
-.FAQ{
-  right: 150px;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-</style>
-
-
 <script>
-
-// import SlideShow from "../components/slideShow.vue"
 import VueFaqAccordion from 'vue-faq-accordion'
 import barchart from '../barchart.js'
 import linechart from '../linechart.js'
 import doughnut from '../doughnut.js'
+import runtime from '../runtime.js'
+
 export default {
   components:{
-    barchart,
-    linechart,
-    doughnut,
-    VueFaqAccordion
+    barchart, linechart, doughnut, runtime, VueFaqAccordion
   },
   data() {
     return {
@@ -76,7 +42,6 @@ export default {
               + "produce a compiled excel sheet of the relevant summarized information that can either be downloaded instantly"
               + "through the website or sent via email to the user."
         },
-
         {
           title: "How much does it cost to use Text Cruncher?",
           value: "It is entirely free of charge to use Text Cruncher."
@@ -107,10 +72,48 @@ export default {
             +"Our operating hours are 8am-6pm weekdays 10am-4pm weekends. Please note as Text Cruncher is a work in progress, " 
             +"we welcome your comments to help this platform grow further and appreciate your kind patience."
         }
-
       ]
     }
   },
-  
 }
+
 </script>
+
+<style scoped>
+#main{
+    content:"";
+    display:table;
+    clear:both;
+}
+#chart{
+  height:300px;
+  width:50%;
+  padding:10px 30px;
+  margin:130;
+  float:left;
+}
+#chart2{
+  height:300px;
+  width:50%;
+  padding:130px 30px;
+  margin:auto;
+  float:left;
+}
+.dash{
+  padding-top: 1cm;
+  font-family: "Lucida Console", Courier, monospace;
+}
+.FAQ{
+  right: 150px;
+  //padding: 700px;
+}
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+#insights {
+  padding: 850px 30px;
+}
+</style>
