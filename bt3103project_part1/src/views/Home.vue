@@ -53,21 +53,43 @@ textarea{
 <script>
 import swal from 'sweetalert';
 import axios from 'axios';
+//import LoginVue from './Login.vue'
+import database from '../firebase.js'
+
 export default {
   data() {
     return {
       payload: '',
       loadingButton: false,
-      msg:''
+      msg:[],
+      item : {
+        Email: "",
+        Date: "",
+        Json: "",
+        Name: ""
+      } 
     }
   },
   methods: {
+
+
+    storeItem: function() { 
+      //save to database
+      database.collection('files').doc().set(this.item)
+      alert("I am in the DB :D")
+    },
+
+
     scrape: function() {
       const path = 'http://localhost:5000/scrape';
       const help = {queries: this.payload}
       axios.post(path, help)
       .then((res) => {
           this.msg = res.data;
+          this.item.Email = "put email here";
+          this.item.Date = new Date();
+          this.item.Json = res.data;
+          this.storeItem();
         })
         .catch((error) => {
           // eslint-disable-next-line
