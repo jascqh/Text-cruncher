@@ -30,11 +30,13 @@
   float:none;
   margin-bottom:10px ;
 }
+
 ::placeholder{
   color:darkgrey;
   opacity: 1;
   font-size: 12px;
 }
+
 .form-box{
   width:100%;
   height: 40px;
@@ -44,6 +46,8 @@
   margin-bottom: 20px;
   background: #eeeeee;
 }
+
+
 .btn-signin {
   float: left;
   font-weight: 700;
@@ -90,3 +94,4 @@ export default {
   }
 };
 </script>
+
