@@ -23,7 +23,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #4f4f59;
+  color: #2c3e50;
 }
 
 #nav {
@@ -31,17 +31,11 @@ export default {
 
   a {
     font-weight: bold;
-    color: #0000ff;
+    color: #2c3e50;
 
     &.router-link-exact-active {
       color: #42b983;
     }
   }
 }
-
-*{
-  margin:0;
-  padding: 0;
-}
-
 </style>
