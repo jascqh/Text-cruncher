@@ -41,9 +41,9 @@ Vue.use(VueRouter);
       path: "/about",
       name: "About",
       component: About,
-      // meta: {
-      //   requiresAuth: false
-      // }
+       meta: {
+         fullAccess : true
+       }
     },
    
     {
