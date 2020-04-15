@@ -8,7 +8,7 @@ export default{
                 {
                     label: 'Various Ways',
                     data: [4, 28, 12, 9],
-                    backgroundColor:['aqua','lightgreen','red', 'orange'],
+                    backgroundColor:['#C7EA46','#29AB87','#D0F0C0', '#8A9A5B'],
                     borderWidth:0.5,
                     borderColor:"#000",
                     fill:true
@@ -42,7 +42,7 @@ export default{
 
                 }]
             },
-            maintainAspectRatio: true
+            maintainAspectRatio: false
         }
       }),
     mounted(){

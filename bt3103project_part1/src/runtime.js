@@ -1,16 +1,17 @@
-import {Doughnut} from 'vue-chartjs'
+import {Line} from 'vue-chartjs'
 export default{
-    extends:Doughnut,
+    extends:Line,
     data: () => ({
         chartdata: {
-          labels: ['Like','Dislike'],
+          labels: ['1', '2', '3', '4', '5'],
           datasets: [
             {
-              label: 'Sales',
-              data: ['62', '34'],
-              backgroundColor:['#50C878','#708238'],
+              label: 'Number of Queries',
+              data: [1.3, 3.7, 5.6, 10.2, 14.8],
+              backgroundColor:['#4CBB17','#00A86B','#9DC183','#708238'],
               borderWidth:0.5,
-              borderColor:"#000"
+              borderColor:"#000",
+              fill:false
             },
             
           ]
@@ -19,10 +20,9 @@ export default{
         options: {
             title:{
                 display:true,
-                text:'Do Users Prefer Registering?',
+                text:'Average Runtime (seconds)',
                 fontColor:'Black',
                 fontSize:15
-
             },
             legend:{
                 position:'bottom'
@@ -34,14 +34,6 @@ export default{
                     }
 
                 }]
-            },
-            layout:{
-              padding:{
-                  left: 5,
-                  right: 0,
-                  top: 0,
-                  bottom: 10
-              }
             },
             maintainAspectRatio: false
           
