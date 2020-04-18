@@ -96,7 +96,7 @@ export default {
   }, 
 
     retriveFile: function() {
-      const path = 'http://localhost:5000/return-file'
+      const path = 'https://btproject3103.herokuapp.com/return-file'
       axios.get(path)
       .then((res) =>{
         this.json = res.data
@@ -124,7 +124,7 @@ export default {
         return
       }
       else {
-        const path = 'http://localhost:5000/send-mail';
+        const path = 'https://btproject3103.herokuapp.com/send-mail';
         axios.post(path, payload)
         .then(() =>{
             swal({

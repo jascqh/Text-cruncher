@@ -2,6 +2,7 @@
 node_modules
 /dist
 venv
+myCred
 
 # local env files
 .env.local

@@ -38,8 +38,8 @@ chrome_options.add_argument("-incognito")
 chrome_options.add_argument("--disable-popup-blocking")
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--no-sandbox')
-# sel_driver = webdriver.Chrome(executable_path=chromedriver_path,chrome_options=chrome_options)
-sel_driver = webdriver.Chrome(executable_path='./static/ChromeDriverWin32/chromedriver.exe',chrome_options=chrome_options) #Local host Test
+sel_driver = webdriver.Chrome(executable_path=chromedriver_path,chrome_options=chrome_options)
+# sel_driver = webdriver.Chrome(executable_path='./static/ChromeDriverWin32/chromedriver.exe',chrome_options=chrome_options) #Local host Test
 
 def scrape(lst_query):
 
@@ -299,6 +299,9 @@ def return_file():
     json_str = excel_data_df.to_json()
     return json_str
 
+@app.route('/', methods=['GET'])
+def test():
+    return "<h1> TextCruncher Backend<h1>"
 
 
 if __name__ == '__main__':
