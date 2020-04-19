@@ -103,7 +103,6 @@ export default {
     storeItem: function() { 
       //save to database
       database.collection('users').doc().set(this.item)
-      alert("I am in the DB :D")
     },
     register: function(e) {
       firebase
@@ -117,7 +116,8 @@ export default {
             this.item.datecreated = new Date();
             this.storeItem();
             alert(`Account Created for ${user.email}`);
-            this.$router.replace({ name: "Home" });; 
+            this.$router.replace({ name: "Home" });
+            this.$router.go({ path: '/home' }); 
           },
           err => {
             alert(err.message);
