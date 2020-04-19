@@ -58,7 +58,6 @@ export default {
       //Deleting from the itemsList Array
       this.itemsList.splice(index,1)
       //Msg to be displayed. Can be made as an alert
-      console.log("Item Deleted Successfully")
 
     },
       convertData:function(json_str){
@@ -71,7 +70,6 @@ export default {
         }
         
       }
-      console.log(datas)
       return datas
 
     },

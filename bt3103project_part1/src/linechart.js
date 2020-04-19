@@ -7,7 +7,7 @@ export default{
         months : {1:"Jan", 2:"Feb", 3:"Mar", 4:"Apr", 5:"May", 6:"Jun", 7:"Jul", 8:"Aug", 9:"Sep", 10:"Oct", 11:"Nov", 12:"Dec"},
         items:[],
         datacollection: {
-            labels:[],
+            labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
         datasets: []  
         }     
         ,
@@ -44,6 +44,7 @@ export default{
                   var data = {}
                   for (var i=0; i < this.items.length; i ++){
                       var month = this.months[this.items[i].Date.toDate().getMonth()]
+                      data["Jan"] = 0
                       if (!(month in data)){
                         data[month] = 1 // initiate counter as 1
                       } else {
@@ -53,7 +54,7 @@ export default{
 
                   var values = []
                   for (var key in data){
-                      this.datacollection.labels.push(key) // key is the month
+                      //this.datacollection.labels.push(key) // key is the month
                       values.push(data[key])
                   }
                   this.datacollection.datasets.push({data:values, label:"2020", borderColor:"#29AB87", fill:false})

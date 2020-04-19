@@ -14,6 +14,7 @@
         <i v-if = "loadingButton" class = "spinner-border spinner-border-sm"></i>
       </button>
   </b-container>
+  <h3 style = "color : red"> Due to limited resources server can only handle 1 query at a time. To handle more queries, server would need to be upgraded to paid version </h3>
   
 </div>
 
@@ -66,7 +67,7 @@ export default {
         Json:"",
         Name:"",
         Email:""
-      }
+      },
     }
   },
   methods: {
@@ -82,6 +83,9 @@ export default {
       const help = {queries: this.payload}
       axios.post(path, help)
 
+      // .then(()=> {
+      //   axios.get(path)
+      // })
       .then((res) => {
           this.msg = res.data.results;
           this.item.Email = this.$session.get('email');
