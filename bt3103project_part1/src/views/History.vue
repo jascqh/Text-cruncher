@@ -7,8 +7,8 @@
         <li v-for="(item , index) in itemsList" v-bind:key="item.id">
           <div>
             {{item.Name}}
-             <button class="btn" v-show="!alt" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
-            <button class="btn" v-show="alt" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
+             <button class="btn" name="delete" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
+           
         
             </div>
              <download-csv class="download" name="query.csv"
@@ -134,7 +134,7 @@ li:nth-of-type(even) {
   background-color: #3b3a30;
   color:#eaece5
 }
-.btn:nth-of-type(even){
+li:nth-of-type(even) button{
   background-color: #b2c2bf;
   border: none; /* Remove borders */
   color: #3b3a30; /* White text */
