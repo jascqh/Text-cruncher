@@ -19,7 +19,7 @@
            
         </li>
     </ul> -->
-    <ul id="item-list">
+    <ul id="item-list" style="display: flex;flex-wrap: wrap; list-style-type: none; padding: 0;">
 
     </ul>
     </b-card>
@@ -151,7 +151,7 @@ h1{
   
 }
 
-.override.ul{
+ul{
     display: flex;
     flex-wrap: wrap;
     list-style-type: none;
