@@ -20,7 +20,7 @@
         </li>
     </ul> -->
     <ul id="item-list" style="display: flex;flex-wrap: wrap; list-style-type: none; padding: 0;">
-      
+
     </ul>
     </b-card>
 </div>
@@ -60,19 +60,8 @@ export default {
         name.textContent = doc.data().Name;
         
         li.appendChild(name);
-      
-        let btn = document.createElement("download-csv");
-        btn.setAttribute('data' ,this.convertData(doc.data().Json));
-        btn.innerHTML = 'Download'
-        if(!this.alt){
-          btn.setAttribute('style' ,"text-align: right; padding: 10px; margin:0px 30px;background-color:#eaece5;")
-        }
-        else{
-          btn.setAttribute('style' ,"text-align: right; padding: 10px; margin:0px 30px;background-color:#b2c2bf;")
-        }
 
         itemList.appendChild(li);
-        itemList.appendChild(btn);
       }
 
     },
