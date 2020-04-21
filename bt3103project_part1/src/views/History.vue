@@ -34,7 +34,8 @@ export default {
     return{
         // itemsList: [],
         email: "",
-        count:0
+        count:0,
+        alt: true
         }
   },
   methods:{
@@ -49,6 +50,13 @@ export default {
         let name = document.createElement('span');
 
         li.setAttribute('data-id', doc.id);
+        if(this.alt){
+          li.setAttribute('style' ,"width:100%; text-align: left; padding: 10px; margin:0px 30px;background-color:#eaece5;")
+        }
+        else{
+          li.setAttribute('style' ,"width:100%; text-align: left; padding: 10px; margin:0px 30px;background-color:#b2c2bf;")
+        }
+        this.alt = !this.alt
         name.textContent = doc.data().Name;
         
         li.appendChild(name);
@@ -143,27 +151,27 @@ h1{
   
 }
 
-ul{
+.override.ul{
     display: flex;
     flex-wrap: wrap;
     list-style-type: none;
     padding: 0;
 }
-li{
+.override.li{
     width:100%;
     text-align: left;
     padding: 10px;
     margin:0px 30px;
     background-color:#eaece5;
 }
-li:nth-of-type(even) { 
-      width:100%;
+.override.li:nth-of-type(even) { 
+    width:100%;
     text-align: left;
     padding: 10px;
     margin:0px 30px;
     background-color:#b2c2bf;
 }
-.btn {
+.override.btn {
   background-color: #eaece5;
   border: none; /* Remove borders */
   color: #3b3a30; /* White text */
@@ -188,6 +196,7 @@ li:nth-of-type(even) {
   cursor: pointer;
   align-self: right;
 }
+
 
 .download{
   float:right;
