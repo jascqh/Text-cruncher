@@ -7,7 +7,7 @@ export default{
           datasets: [
             {
               label: 'Number of Queries',
-              data: [50, 120, 140, 150, 155],
+              data: [1.3, 3.7, 5.6, 10.2, 14.8],
               backgroundColor:['#4CBB17','#00A86B','#9DC183','#708238'],
               borderWidth:0.5,
               borderColor:"#000",

@@ -15,9 +15,6 @@
     <div id = "chart2">
       <runtime></runtime>
     </div>
-    <div id="chart3">
-      <userchart/>
-    </div>
     <div id = "insights">
       <VueFaqAccordion class = "FAQ" :items="myItems"/>
     </div>
@@ -30,11 +27,10 @@ import barchart from '../barchart.js'
 import linechart from '../linechart.js'
 import doughnut from '../doughnut.js'
 import runtime from '../runtime.js'
-import userchart from '../userchart.js'
 
 export default {
   components:{
-    barchart, linechart, doughnut, runtime, VueFaqAccordion, userchart
+    barchart, linechart, doughnut, runtime, VueFaqAccordion
   },
   data() {
     return {
@@ -103,20 +99,13 @@ export default {
   margin:auto;
   float:left;
 }
-#chart3{
-  height:300px;
-  width:100%;
-  padding:250px 30px;
-  margin:auto;
-  float:left;
-}
 .dash{
   padding-top: 1cm;
   font-family: "Lucida Console", Courier, monospace;
 }
 .FAQ{
-    right: 150px;
-    padding: 1000 px;
+  right: 150px;
+  //padding: 700px;
 }
 /* Clear floats after the columns */
 .row:after {
@@ -125,6 +114,6 @@ export default {
   clear: both;
 }
 #insights {
-  padding: 1250px 30px;
+  padding: 850px 30px;
 }
 </style>
