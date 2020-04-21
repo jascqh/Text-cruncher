@@ -4,19 +4,17 @@
     <b-card class="card">
     <h1>Search history</h1>
       <ul>
-        <li v-for="(item , index) in itemsList" v-bind:key="item.id" v-on="increaseCount()">
+        <li v-for="(item , index) in itemsList" v-bind:key="item.id">
           <div>
             {{item.Name}}
-             <button class="btn" v-show="!isEven()" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
-            <button class="btn" v-show="isEven()" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
+             <button class="btn" v-show="!alt" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
+            <button class="btn" v-show="alt" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
         
             </div>
              <download-csv class="download" name="query.csv"
               :data   = convertData(item.Json)>
                 <i class="fa fa-download" aria-hidden="true"></i>
-          </download-csv>
-            
-           
+            </download-csv>
         </li>
     </ul>
     </b-card>
@@ -31,7 +29,7 @@ export default {
     return{
         itemsList: [],
         email: "",
-        count:0
+        alt: true
         }
   },
   methods:{
@@ -69,9 +67,8 @@ export default {
         for (var key in json) { 
           data[key] = json[key][i]
         }
-        
+        datas.push(data)
       }
-      console.log(datas)
       return datas
 
     },
