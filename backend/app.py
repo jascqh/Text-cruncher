@@ -14,7 +14,7 @@ from selenium.webdriver.chrome.options import Options
 from datetime import datetime
 from flask_mail import Mail, Message
 from flask import Flask, render_template, request, send_file, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 
 """ --------------------Main Script-------------------------- """
@@ -243,7 +243,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 # enable CORS
-CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app,resources={r'/*': {'origins': '*'}}) #resources={r'/*': {'origins': '*'}}
 
 """Flask Mail Configuration"""
 app.config['TESTING'] = False
@@ -262,10 +262,11 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 """Flask Mail Sending"""
 mail= Mail(app)
-
+response_object = {'status': 'success'}
 # Routing
 
 @app.route('/send-mail', methods=['POST'])
+@cross_origin(origin='*',headers=['access-control-allow-origin','Content-Type'])
 def send_mail():
     post_data = request.get_json()
     emailadd = post_data.get('EMAIL')
@@ -279,21 +280,24 @@ def send_mail():
         mail.send(msg)
     return jsonify({'status':"DONE"})
 
-@app.route('/scrape', methods=['POST'])
+@app.route('/scrape', methods=['GET','POST'])
+@cross_origin(origin='*',headers=['access-control-allow-origin','Content-Type'])
 def scrape_now():
     #OBtains data from html form and pass it through python to another html page
     # queries = request.form['queries'] #receives from html form as String
     # return render_template('downloads.html', filename=current_timestamp)
-    response_object = {'status': 'success'}
-    post_data = request.get_json()
-    queries = post_data.get('queries')    
-    lst_queries = queries.split(',') #split by ','
-    # current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-    response_object ['results']= scrape(lst_queries)
-    return jsonify(response_object)
-
+    if request.method == "POST":
+        post_data = request.get_json()
+        queries = post_data.get('queries')    
+        lst_queries = queries.split(',') #split by ','
+        # current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
+        response_object ['results']= scrape(lst_queries)
+        return jsonify(response_object)
+    else:
+        return jsonify(response_object)
 
 @app.route('/return-file', methods=['GET'])
+@cross_origin()
 def return_file():
     excel_data_df = pd.read_excel('./static/user_pulls/output.xlsx', sheet_name='Results')
     json_str = excel_data_df.to_json()
