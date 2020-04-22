@@ -78,7 +78,7 @@ export default {
     },
 
     scrape: function() {
-      const path = 'http://localhost:5000/scrape';
+      const path = 'https://btproject3103.herokuapp.com/scrape';
       const help = {queries: this.payload}
       axios.post(path, help)
 
