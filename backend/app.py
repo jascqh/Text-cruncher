@@ -14,7 +14,7 @@ from selenium.webdriver.chrome.options import Options
 from datetime import datetime
 from flask_mail import Mail, Message
 from flask import Flask, render_template, request, send_file, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
 
 """ --------------------Main Script-------------------------- """
@@ -105,17 +105,13 @@ def scrape(lst_query):
         prCyan("Resuming")
 
     try:
-        os.remove('./static/user_pulls/output.xlsx')
-    except:
-        pass
-    try:
         wb = openpyxl.load_workbook('./static/user_pulls/output.xlsx')
         std = wb.get_sheet_by_name('Results')
         wb.remove_sheet(std)
         wb.save('./static/user_pulls/output.xlsx')
-
     except:
         pass
+
     # Output to Excel File
     df_results = pd.DataFrame(final_output, columns=final_header)
     writer = pd.ExcelWriter('./static/user_pulls/output.xlsx', engine='xlsxwriter')
@@ -247,9 +243,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 # enable CORS
-CORS(app ,resources={r'/*': {'origins': '*'}} ) # resources={r'/*': {'origins': '*'}}
-app.config['CORS_HEADERS'] = 'Content-Type'
-
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 """Flask Mail Configuration"""
 app.config['TESTING'] = False
@@ -271,8 +265,6 @@ mail= Mail(app)
 
 # Routing
 
-response_object = {'status': 'success'}
-
 @app.route('/send-mail', methods=['POST'])
 def send_mail():
     post_data = request.get_json()
@@ -287,36 +279,27 @@ def send_mail():
         mail.send(msg)
     return jsonify({'status':"DONE"})
 
-@app.route('/scrape', methods=['GET','POST'])
+@app.route('/scrape', methods=['POST'])
 def scrape_now():
-    
-    if request.method == 'POST':
     #OBtains data from html form and pass it through python to another html page
     # queries = request.form['queries'] #receives from html form as String
     # return render_template('downloads.html', filename=current_timestamp)
-        post_data = request.get_json()
-        queries = post_data.get('queries')    
-        lst_queries = queries.split(',') #split by ','
-        # current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
-        response_object ['results']= scrape(lst_queries)
-        return jsonify(response_object)
-    else:
-        return jsonify(response_object)
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+    queries = post_data.get('queries')    
+    lst_queries = queries.split(',') #split by ','
+    # current_timestamp = datetime.now().strftime('%m%d%Y%H%M%S')
+    response_object ['results']= scrape(lst_queries)
+    return jsonify(response_object)
 
 
 @app.route('/return-file', methods=['GET'])
 def return_file():
-    try:
-        excel_data_df = pd.read_excel('./static/user_pulls/output.xlsx', sheet_name='Results')
-        json_str = excel_data_df.to_json()
-        return json_str
-    except:
-        return "<h1> Deleted</h1>"
+    excel_data_df = pd.read_excel('./static/user_pulls/output.xlsx', sheet_name='Results')
+    json_str = excel_data_df.to_json()
+    return json_str
 
-@app.route('/', methods=['GET'])
-def test():
-    return "<h1> TextCruncher Backend</h1>"
 
 
 if __name__ == '__main__':
-    app.run(threaded = True)
+    app.run(threaded=True)

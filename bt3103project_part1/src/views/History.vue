@@ -7,8 +7,8 @@
         <li v-for="(item , index) in itemsList" v-bind:key="item.id" v-on="increaseCount()">
           <div>
             {{item.Name}}
-             <button class="btn" v-show="!isEven()" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
-            <button class="btn" v-show="isEven()" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
+             <button class="btn" v-show="isEven()" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
+            <button class="btn" v-show="!isEven()" name="delete" v-bind:id="item.id" v-on:click="deleteItem(index,item)"><i class="fa fa-trash"></i></button>
         
             </div>
              <download-csv class="download" name="query.csv"
@@ -31,7 +31,6 @@ export default {
     return{
         itemsList: [],
         email: "",
-        count:0
         }
   },
   methods:{
@@ -73,11 +72,9 @@ export default {
       return datas
 
     },
-    increaseCount:function(){
-      this.count++;
-    },
-    isEven:function(){
-      if (this.count%2==0){
+
+    isEven:function(num){
+      if (num%2==0){
         return true
       }
     }
